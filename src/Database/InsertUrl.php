@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code\Database;
 
-use PostgreSQLTutorial\FindUrl;
+use Hexlet\Code\Database\FindUrl;
 
 class InsertUrl
 {
