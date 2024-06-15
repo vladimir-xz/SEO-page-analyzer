@@ -12,21 +12,21 @@ class FindUrl
      * @var \PDO
      */
     private $pdo;
-    private $condition;
+    private $byKey;
 
-    public function __construct($pdo, $condition = 'id')
+    public function __construct($pdo, $byKey = 'id')
     {
         $this->pdo = $pdo;
-        $this->condition = $condition;
+        $this->byKey = $byKey;
     }
 
-    public function find(int $value)
+    public function process(int $value)
     {
         $sql = 'SELECT ad_id, client_id, image_url
                 FROM ad
                 WHERE :cond = :val';
         $sth = $this->pdo->prepare($sql);
-        $sth->execute(['cond' => $this->condition, 'val' => $value]);
+        $sth->execute(['cond' => $this->byKey, 'val' => $value]);
         $red = $sth->fetchAll();
         return $red;
     }

@@ -18,10 +18,10 @@ class InsertUrl
         $this->pdo = $pdo;
     }
 
-    public function insert(int $url)
+    public function process(int $url)
     {
         $find = new FindUrl($this->pdo, 'url');
-        $findResult = $find->find($url);
+        $findResult = $find->process($url);
         if ($findResult) {
             return $findResult;
         }

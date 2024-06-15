@@ -21,7 +21,6 @@ class Engine
 
     public function process()
     {
-        $action = $this->action;
-        return $this->processor->$action($this->value);
+        return $this->processor->process($this->value);
     }
 }
