@@ -1,31 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Анализатор страниц</title>
 </head>
 <body class="min-vh-100 d-flex flex-column">
+    <header>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Анализатор страниц</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Главная</a>
+                        </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="#">Сайты</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
     <main class="flex-grow-1">
-        <div class="container-lg mt-3">
-            <div class="row">
-                <div class="col-12 col-md-10 col-lg-8 mx-auto border rounded-3 bg-light p-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-8 border h-100 bg-light my-3 rounded p-5">
                     <h1 class="display-3">Анализатор страниц</h1>
-                    <p class="lead">Бесплатно проверяйте сайты на SEO пригодность</p>
-                    <form action="/urls" method="post" class="row" required="">
-                    <div class="col-8">
-                    <input type="text" name="url[name]" value="" class="form-control form-control-lg" placeholder="https://www.example.com">
-                            </div>
-                    <div class="col-2">
-                        <input type="submit" class="btn btn-primary btn-lg ms-3 px-5 text-uppercase mx-3" value="Проверить">
-                    </div>
-
+                    <p class="fs-5 fw-light">Бесплатно проверяйте сайты на SEO пригодность</p>
+                    <form action="/urls" class="row mb-3">
+                        <div class="col-8">
+                            <input type="text" id="form1" class="form-control form-control-lg" placeholder="https://www.example.com">
+                        </div>
+                        <div class="col">
+                            <button  type="button" class="btn btn-lg btn-primary ms-3 mx-3 px-5">ПРОВЕРИТЬ</button>
+                        </div>
                     </form>
-
                 </div>
             </div>
         </div>
     </main>
+    <footer class="border-top py-3">
+        <div class="container-lg">
+            <div class="text-center">
+                <a href="#">Hexlet</a>
+            </div>
+        </div>
+    </footer>
 </body>
 </html>
