@@ -1,10 +1,10 @@
 <?php
 
-namespace Hexlet\Code\Database;
+namespace Hexlet\Code\Url;
 
 use Hexlet\Code\Database\FindUrl;
 
-class InsertUrl
+class Insert
 {
     /**
      * объект PDO
@@ -18,20 +18,20 @@ class InsertUrl
         $this->pdo = $pdo;
     }
 
-    public function process(int $url)
+    public function process(string $url)
     {
-        $find = new FindUrl($this->pdo);
-        $findResult = $find->process($url, 'name');
+        $find = new FindByUrl($this->pdo);
+        $findResult = $find->process($url);
         if ($findResult) {
             return $findResult;
         }
         $sql = 'INSERT INTO urls (name, created_at)
-                VALUES (:name, ;created_at)';
+                VALUES (:name, :created_at)';
         $sth = $this->pdo->prepare($sql);
         $sth->execute([
             'name' => $url,
-            'created_at' => 444,
+            'created_at' => '2022-10-20',
         ]);
-        return $this->pdo->lastInsertId('labels_id_seq');
+        return $this->pdo->lastInsertId();
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Slim\Middleware\MethodOverrideMiddleware;
 use Slim\Factory\AppFactory;
+use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
+use Hexlet\Code\Engine;
+use Hexlet\Code\Validator;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -18,9 +18,32 @@ $app->addErrorMiddleware(true, true, true);
 $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
-$app->get('/', function (Request $request, Response $response) {
+$app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
+$app->get('/url/{id}', function ($request, $response, $args) {
+    $id = $args['id'];
+    $engine = new Engine('url', 'find', $id);
+    $url = $engine->process();
+    $params = [
+        'url' => $url,
+    ];
+    return $this->get('renderer')->render($response, 'url.phtml', $params);
+});
+
+$app->post('/urls', function ($request, $response) {
+    $validator = new Validator();
+    $url = $request->getParsedBodyParam('url');
+    $errors = $validator->validate($url);
+        $engine = new Engine('url', 'insert', $url['name']);
+        $insertedId = $engine->process();
+        return $response->withRedirect("/url/{$insertedId}", 302);
+    $params = [
+        'url' => $url,
+        'errors' => $errors
+    ];
+    return $this->get('renderer')->render($response, "index.phtml", $params);
+});
 
 $app->run();

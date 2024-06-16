@@ -1,10 +1,10 @@
 <?php
 
-namespace Hexlet\Code\Database;
+namespace Hexlet\Code\Url;
 
-class ConnectUrls
+class Connect
 {
-    private static ?ConnectUrls $conn = null;
+    private static ?Connect $conn = null;
 
     public function connect()
     {
@@ -13,14 +13,16 @@ class ConnectUrls
             throw new \Exception("Error reading database configuration file");
         }
 
-        $conStr = sprintf(
-            "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
-            $databaseUrl['host'],
-            $databaseUrl['port'],
-            ltrim($databaseUrl['database'], '/'),
-            $databaseUrl['user'],
-            $databaseUrl['password']
-        );
+        // $conStr = sprintf(
+        //     "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
+        //     $databaseUrl['host'],
+        //     $databaseUrl['port'],
+        //     ltrim($databaseUrl['database'], '/'),
+        //     $databaseUrl['user'],
+        //     $databaseUrl['password']
+        // );
+
+        $conStr = "pgsql:host=localhost;port=5432;dbname=mydb;user=vova_xz;password=gnom";
 
         $pdo = new \PDO($conStr);
         $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);

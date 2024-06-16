@@ -1,0 +1,16 @@
+<a href="/">Url</a>
+
+<?php var_dump($url)?>
+<table>
+    <tr>
+      <td>
+          <p>Ид: <?= $url['id']?>;</p>
+      </td>
+      <td>
+        <p>Имя: <?= htmlspecialchars($url['name'])?>;</p>
+      </td>
+      <td>
+        <p>Дата: <?= htmlspecialchars($url['created_at'])?>;</p>
+      </td>
+    </tr>
+</table>

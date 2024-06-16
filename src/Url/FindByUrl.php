@@ -1,11 +1,11 @@
 <?php
 
-namespace Hexlet\Code\Database;
+namespace Hexlet\Code\Url;
 
 /**
  * Создание в PostgreSQL таблицы из демонстрации PHP
  */
-class FindUrl
+class FindByUrl
 {
     /**
      * объект PDO
@@ -18,14 +18,14 @@ class FindUrl
         $this->pdo = $pdo;
     }
 
-    public function process(int $value, $byKey = 'id')
+    public function process(mixed $value)
     {
-        $sql = 'SELECT *
+        $sql = 'SELECT id
                 FROM urls
-                WHERE :cond = :val';
+                WHERE name = :val';
         $sth = $this->pdo->prepare($sql);
-        $sth->execute(['cond' => $byKey, 'val' => $value]);
-        $red = $sth->fetchAll();
+        $sth->execute(['val' => $value]);
+        $red = $sth->fetchColumn();
         return $red;
     }
 }

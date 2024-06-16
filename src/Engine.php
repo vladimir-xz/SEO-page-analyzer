@@ -2,6 +2,9 @@
 
 namespace Hexlet\Code;
 
+use Hexlet\Code\Database\ConnectUrl;
+use Hexlet\Code\Database\InsertUrl;
+
 class Engine
 {
     private $processor;
@@ -12,10 +15,12 @@ class Engine
         $action,
         $value = null
     ) {
-        $connectData = "Connect{$databaseName}";
-        $actionName = "{$action}{$databaseName}";
-        $database = $connectData::get()->connect();
-        $processor = new $actionName($database);
+        // $connectData = "Connect{$databaseName}";
+        // $actionName = "{$action}{$databaseName}";
+        $DbClass = 'Hexlet\\Code\\' . ucfirst($databaseName) . '\\Connect';
+        $actionClass = 'Hexlet\\Code\\' . ucfirst($databaseName) . '\\' . ucfirst($action);
+        $database = $DbClass::get()->connect();
+        $processor = new $actionClass($database);
         $this->processor = $processor;
         $this->value = $value;
     }

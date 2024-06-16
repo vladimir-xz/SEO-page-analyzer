@@ -1,10 +1,10 @@
 <?php
 
-namespace Hexlet\Code\Database;
+namespace Hexlet\Code\Url;
 
 use PostgreSQLTutorial\FindUrl;
 
-class GetUrl
+class Get
 {
     /**
      * объект PDO
