@@ -21,7 +21,7 @@ class GetUrl
     public function process()
     {
         $sql = 'SELECT *
-                FROM ad
+                FROM urls
                 ORDER BY created_at DESC';
         $sth = $this->pdo->prepare($sql);
         $sth->execute();

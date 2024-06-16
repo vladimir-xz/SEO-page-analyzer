@@ -20,18 +20,17 @@ class InsertUrl
 
     public function process(int $url)
     {
-        $find = new FindUrl($this->pdo, 'url');
-        $findResult = $find->process($url);
+        $find = new FindUrl($this->pdo);
+        $findResult = $find->process($url, 'name');
         if ($findResult) {
             return $findResult;
         }
-        $sql = 'INSERT INTO ad (ad_id, client_id, image_url)
-                VALUES (:ad_id, :client_id, ;image_url)';
+        $sql = 'INSERT INTO urls (name, created_at)
+                VALUES (:name, ;created_at)';
         $sth = $this->pdo->prepare($sql);
         $sth->execute([
-            'ad_id' => $url,
-            'client_id' => 444,
-            'image_url' => 'dodo.jpg'
+            'name' => $url,
+            'created_at' => 444,
         ]);
         return $this->pdo->lastInsertId('labels_id_seq');
     }
