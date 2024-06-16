@@ -32,6 +32,15 @@ $app->get('/url/{id}', function ($request, $response, $args) {
     return $this->get('renderer')->render($response, 'url.phtml', $params);
 });
 
+$app->get('/urls', function ($request, $response, $args) {
+    $engine = new Engine('url', 'get');
+    $urls = $engine->process();
+    $params = [
+        'urls' => $urls,
+    ];
+    return $this->get('renderer')->render($response, 'urls.phtml', $params);
+});
+
 $app->post('/urls', function ($request, $response) {
     $validator = new Validator();
     $url = $request->getParsedBodyParam('url');
