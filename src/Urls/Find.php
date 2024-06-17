@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Url;
+namespace Hexlet\Code\Urls;
 
 /**
  * Создание в PostgreSQL таблицы из демонстрации PHP

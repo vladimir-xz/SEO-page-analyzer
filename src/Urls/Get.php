@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Url;
+namespace Hexlet\Code\Urls;
 
 use PostgreSQLTutorial\FindUrl;
 

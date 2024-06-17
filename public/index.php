@@ -22,9 +22,9 @@ $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
 });
 
-$app->get('/url/{id}', function ($request, $response, $args) {
+$app->get('/urls/{id}', function ($request, $response, $args) {
     $id = $args['id'];
-    $engine = new Engine('url', 'find', $id);
+    $engine = new Engine('urls', 'find', $id);
     $url = $engine->process();
     $params = [
         'url' => $url,
@@ -33,7 +33,7 @@ $app->get('/url/{id}', function ($request, $response, $args) {
 });
 
 $app->get('/urls', function ($request, $response, $args) {
-    $engine = new Engine('url', 'get');
+    $engine = new Engine('urls', 'get');
     $urls = $engine->process();
     $params = [
         'urls' => $urls,
@@ -45,9 +45,9 @@ $app->post('/urls', function ($request, $response) {
     $validator = new Validator();
     $url = $request->getParsedBodyParam('url');
     $errors = $validator->validate($url);
-        $engine = new Engine('url', 'insert', $url['name']);
+        $engine = new Engine('urls', 'insert', $url['name']);
         $insertedId = $engine->process();
-        return $response->withRedirect("/url/{$insertedId}", 302);
+        return $response->withRedirect("/urls/{$insertedId}", 302);
     $params = [
         'url' => $url,
         'errors' => $errors
