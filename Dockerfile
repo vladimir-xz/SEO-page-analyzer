@@ -14,4 +14,8 @@ COPY . .
 
 RUN composer install
 
+RUN export DATABASE_URL=postgresql://janedoe:mypassword@localhost:5432/mydb;
+
+RUN psql -a -d $DATABASE_URL -f database.sql;
+
 CMD ["bash", "-c", "make start"]
