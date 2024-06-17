@@ -83,7 +83,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
     $urlId = $args['url_id'];
-    $results = [$urlId];
+    $results = ['url_id' => $urlId];
     if (!$results) {
         $this->get('flash')->addMessage('error', 'Произошла ошибка при проверке, не удалось подключиться');
     } else {
