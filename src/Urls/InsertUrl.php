@@ -4,7 +4,7 @@ namespace Hexlet\Code\Urls;
 
 use Carbon\Carbon;
 
-class Insert
+class InsertUrl
 {
     public static function process($db, string $url)
     {

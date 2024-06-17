@@ -13,8 +13,8 @@ class DbHandler
     public function __construct(
         $databaseName
     ) {
-        $this->dbName = $databaseName;
-        $DbClass = 'Hexlet\\Code\\' . ucfirst($databaseName) . '\\Connect';
+        $this->dbName = ucfirst($databaseName);
+        $DbClass = 'Hexlet\\Code\\' . $this->dbName . '\\Connect';
         $database = $DbClass::get()->connect();
         $this->db = $database;
     }
@@ -23,7 +23,8 @@ class DbHandler
         $action,
         $value = null
     ) {
-        $actionClass = 'Hexlet\\Code\\' . ucfirst($this->dbName) . '\\' . ucfirst($action);
+        $properName = str_replace(' ', '', ucwords($action));
+        $actionClass = 'Hexlet\\Code\\' . $this->dbName . '\\' . $properName;
         return $actionClass::process($this->db, $value);
     }
 }

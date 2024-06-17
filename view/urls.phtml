@@ -52,7 +52,7 @@
                                             <?= htmlspecialchars($url['name'])?>
                                         </a>
                                     </td>
-                                    <td><?= htmlspecialchars($url['created_at'])?></th>
+                                    <td><?= htmlspecialchars($url['last_check'] ?? '')?></th>
                                     <td><?= htmlspecialchars($url['cod'] ?? '')?></th>
                                 </tr>
                             <?php endforeach ?>

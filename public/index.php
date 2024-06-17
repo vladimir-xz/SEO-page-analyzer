@@ -37,7 +37,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($router) {
     $messages = $this->get('flash')->getMessages();
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
-    $url = $dbHandler->process('find', $id);
+    $url = $dbHandler->process('find by id', $id);
     $checkRecords = $dbHandler->process('getCheckRecords', $id);
     $params = [
         'url' => $url,
@@ -49,7 +49,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($router) {
 
 $app->get('/urls', function ($request, $response) use ($router) {
     $dbHandler = new DbHandler('urls');
-    $urls = $dbHandler->process('get');
+    $urls = $dbHandler->process('get urls');
     $params = [
         'urls' => $urls,
     ];
@@ -61,13 +61,13 @@ $app->post('/urls', function ($request, $response) use ($router) {
     $dbHandler = new DbHandler('urls');
     $url = $request->getParsedBodyParam('url');
     $errors = $validator->validate($url);
-    $existingUrl = $dbHandler->process('findByUrl', $url['name']);
+    $existingUrl = $dbHandler->process('find by url', $url['name']);
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
         urlFor('url', ['id' => $existingUrl]), 302);
     } elseif (count($errors) === 0) {
-        $insertedId = $dbHandler->process('insert', $url['name']);
+        $insertedId = $dbHandler->process('insert url', $url['name']);
         $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         return $response->withRedirect($router->
         urlFor('url', ['id' => $insertedId]), 302);
@@ -87,7 +87,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
     if (!$results) {
         $this->get('flash')->addMessage('error', 'Произошла ошибка при проверке, не удалось подключиться');
     } else {
-        $lastUrl = $dbHandler->process('InsertCheck', $results);
+        $lastUrl = $dbHandler->process('insert check', $results);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     }
     return $response->withRedirect($router->

@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code\Urls;
 
-class Find
+class FindById
 {
     public static function process($db, mixed $value)
     {
