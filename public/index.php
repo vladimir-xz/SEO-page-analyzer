@@ -38,8 +38,10 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($router) {
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
     $url = $dbHandler->process('find', $id);
+    $checkRecords = $dbHandler->process('getCheckRecords', $id);
     $params = [
         'url' => $url,
+        'checks' => $checkRecords,
         'flash' => $messages
     ];
     return $this->get('renderer')->render($response, 'url.phtml', $params);
@@ -76,6 +78,20 @@ $app->post('/urls', function ($request, $response) use ($router) {
         'errors' => $errors
     ];
     return $this->get('renderer')->render($response, "index.phtml", $params);
+});
+
+$app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
+    $dbHandler = new DbHandler('urls');
+    $urlId = $args['url_id'];
+    $results = [$urlId];
+    if (!$results) {
+        $this->get('flash')->addMessage('error', 'Произошла ошибка при проверке, не удалось подключиться');
+    } else {
+        $lastUrl = $dbHandler->process('InsertCheck', $results);
+        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+    }
+    return $response->withRedirect($router->
+    urlFor('url', ['id' => $urlId]), 302);
 });
 
 $app->run();

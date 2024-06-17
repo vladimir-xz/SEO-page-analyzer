@@ -2,15 +2,16 @@
 
 namespace Hexlet\Code\Urls;
 
-class Get
+class GetCheckRecords
 {
-    public static function process($db)
+    public static function process($db, $urlId)
     {
         $sql = 'SELECT *
-                FROM urls
+                FROM url_checks
+                WHERE url_id = :id
                 ORDER BY created_at DESC';
         $sth = $db->prepare($sql);
-        $sth->execute();
+        $sth->execute(['id' => $urlId]);
         return $sth->fetchAll();
     }
 }

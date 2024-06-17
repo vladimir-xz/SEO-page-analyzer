@@ -2,9 +2,6 @@
 
 namespace Hexlet\Code\Urls;
 
-/**
- * Создание в PostgreSQL таблицы из демонстрации PHP
- */
 class FindByUrl
 {
     public static function process($db, mixed $value)
