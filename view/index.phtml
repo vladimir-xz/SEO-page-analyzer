@@ -37,7 +37,14 @@
                     <p class="fs-5 fw-light">Бесплатно проверяйте сайты на SEO пригодность</p>
                     <form action="/urls" class="row mb-3" method="post">
                         <div class="col-8">
-                            <input type="text" name='url[name]' class="form-control form-control-lg" placeholder="https://www.example.com">
+                            <?php if (!$errors == null) : ?>
+                                <input type="text" name='url[name]' id="validationServer03" class="form-control is-invalid form-control-lg" placeholder="https://www.example.com" aria-describedby="validationServer03Feedback">
+                                <div id="validationServer03Feedback" class="invalid-feedback">
+                                    Некорректный URL
+                                </div>
+                            <?php else : ?>
+                                <input type="text" name='url[name]' id="validationServer03" class="form-control form-control-lg" placeholder="https://www.example.com" aria-describedby="validationServer03Feedback">
+                            <?php endif ?>
                         </div>
                         <div class="col">
                             <input  type="submit" class="btn btn-lg btn-primary ms-3 mx-3 px-5" value="Проверить">
