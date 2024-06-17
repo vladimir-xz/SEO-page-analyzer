@@ -3,7 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\Engine;
+use Hexlet\Code\DbHandler;
 use Hexlet\Code\Validator;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -25,14 +25,19 @@ $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response) {
     $messages = $this->get('flash')->getMessages();
-    return $this->get('renderer')->render($response, 'index.phtml');
+    $url = $request->getParsedBodyParam('url');
+    $params = [
+        'flash' => $messages,
+        'url' => $url
+    ];
+    return $this->get('renderer')->render($response, 'index.phtml', $params);
 });
 
 $app->get('/urls/{id}', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
     $id = $args['id'];
-    $engine = new Engine('urls', 'find', $id);
-    $url = $engine->process();
+    $dbHandler = new DbHandler('urls');
+    $url = $dbHandler->process('find', $id);
     $params = [
         'url' => $url,
         'flash' => $messages
@@ -41,8 +46,8 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
 });
 
 $app->get('/urls', function ($request, $response, $args) {
-    $engine = new Engine('urls', 'get');
-    $urls = $engine->process();
+    $dbHandler = new DbHandler('urls');
+    $urls = $dbHandler->process('get');
     $params = [
         'urls' => $urls,
     ];
@@ -51,17 +56,22 @@ $app->get('/urls', function ($request, $response, $args) {
 
 $app->post('/urls', function ($request, $response) {
     $validator = new Validator();
+    $dbHandler = new DbHandler('urls');
     $url = $request->getParsedBodyParam('url');
     $errors = $validator->validate($url);
-    if (count($errors) === 0) {
-        $engine = new Engine('urls', 'insert', $url['name']);
-        $insertedId = $engine->process();
+    $existingUrl = $dbHandler->process('findByUrl', $url['name']);
+    if ($existingUrl) {
+        $this->get('flash')->addMessage('success', 'Страница уже существует');
+        return $response->withRedirect("/urls/{$existingUrl}", 302);
+    } elseif (count($errors) === 0) {
+        $insertedId = $dbHandler->process('insert', $url['name']);
         $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         return $response->withRedirect("/urls/{$insertedId}", 302);
     }
+    $this->get('flash')->addMessage('error', 'Некорректный URL');
     $params = [
-        'url' => $url,
-        'errors' => 5
+        'url' => $url['name'],
+        'errors' => $errors
     ];
     return $this->get('renderer')->render($response, "index.phtml", $params);
 });

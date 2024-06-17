@@ -7,23 +7,12 @@ namespace Hexlet\Code\Urls;
  */
 class FindByUrl
 {
-    /**
-     * объект PDO
-     * @var \PDO
-     */
-    private $pdo;
-
-    public function __construct($pdo)
-    {
-        $this->pdo = $pdo;
-    }
-
-    public function process(mixed $value)
+    public static function process($db, mixed $value)
     {
         $sql = 'SELECT id
                 FROM urls
                 WHERE name = :val';
-        $sth = $this->pdo->prepare($sql);
+        $sth = $db->prepare($sql);
         $sth->execute(['val' => $value]);
         $red = $sth->fetchColumn();
         return $red;

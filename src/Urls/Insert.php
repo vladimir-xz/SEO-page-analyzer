@@ -2,36 +2,20 @@
 
 namespace Hexlet\Code\Urls;
 
+use Carbon\Carbon;
 use Hexlet\Code\Database\FindUrl;
 
 class Insert
 {
-    /**
-     * объект PDO
-     * @var \PDO
-     */
-    private $pdo;
-
-
-    public function __construct($pdo)
+    public static function process($db, string $url)
     {
-        $this->pdo = $pdo;
-    }
-
-    public function process(string $url)
-    {
-        $find = new FindByUrl($this->pdo);
-        $findResult = $find->process($url);
-        if ($findResult) {
-            return $findResult;
-        }
         $sql = 'INSERT INTO urls (name, created_at)
                 VALUES (:name, :created_at)';
-        $sth = $this->pdo->prepare($sql);
+        $sth = $db->prepare($sql);
         $sth->execute([
             'name' => $url,
-            'created_at' => '2022-10-20',
+            'created_at' => Carbon::now(),
         ]);
-        return $this->pdo->lastInsertId();
+        return $db->lastInsertId();
     }
 }
