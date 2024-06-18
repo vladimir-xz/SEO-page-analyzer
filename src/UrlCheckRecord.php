@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code;
 
-class UrlCheck
+class UrlCheckRecord
 {
     private $id;
     private $urlId;
@@ -28,8 +28,23 @@ class UrlCheck
         return $this->$key;
     }
 
-    public function __set(string $key, string|int $value)
+    public function setStatusCode($code)
     {
-        return $this->$key = $value;
+        $this->statusCode = $code;
+    }
+
+    public function setH1($h1)
+    {
+        $this->h1 = $h1;
+    }
+
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }

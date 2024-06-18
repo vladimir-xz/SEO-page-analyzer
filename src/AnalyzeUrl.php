@@ -2,16 +2,34 @@
 
 namespace Hexlet\Code;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\TransferException;
+use DiDom\Document;
+use Illuminate\Support\Arr;
+
+use function PHPUnit\Framework\isEmpty;
 
 class AnalyzeUrl
 {
-    public static function process(Url $url)
+    private static $analyzeParams = [
+        'H1' => 'h1',
+        'Title' => 'title',
+        'Description' => 'meta[name=description]'
+    ];
+
+    public static function process($urlId, $url)
     {
-        $urlCheck = new UrlCheck()
+        $document = new Document($url->name, true);
+        Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
+            $posts = $document->find($value);
+            foreach ($posts as $post) {
+                if ($key === 'Description') {
+                    $result = $posts[0]->content;
+                } else {
+                    $result = $posts[0]->text();
+                }
+            }
+            $command = 'set' . $key;
+            $url->$command($result);
+        });
+        return $url;
     }
 }

@@ -3,6 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
+use Hexlet\Code\AnalyzeUrl;
 use Hexlet\Code\Check;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\Validator;

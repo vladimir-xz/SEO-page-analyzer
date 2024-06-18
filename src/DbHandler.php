@@ -23,6 +23,7 @@ class DbHandler
         $action,
         $value = null
     ) {
+        // $properName = \Funct\Strings\camelize();
         $properName = str_replace(' ', '', ucwords($action));
         $actionClass = 'Hexlet\\Code\\' . $this->dbName . '\\' . $properName;
         return $actionClass::process($this->db, $value);
