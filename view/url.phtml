@@ -31,9 +31,9 @@
     </header>
     <main class="flex-grow-1">
     <?php if (!$flash == null) : ?>
-        <?php foreach ($flash as $messages) : ?>
+        <?php foreach ($flash as $status => $messages) : ?>
             <?php foreach ($messages as $message) : ?>
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-<?=htmlspecialchars($status)?>" role="alert">
                     <?= htmlspecialchars($message)?>
                 </div>
             <?php endforeach ?>
