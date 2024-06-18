@@ -2,6 +2,8 @@
 
 namespace Hexlet\Code\Urls;
 
+use Hexlet\Code\UrlRecord;
+
 class GetUrls
 {
     public static function process($db)
@@ -26,6 +28,7 @@ class GetUrls
                 ORDER BY urls.id DESC';
         $sth = $db->prepare($sql);
         $sth->execute();
-        return $sth->fetchAll();
+        $urlRecords = array_map(fn($rec) => new UrlRecord($rec), $sth->fetchAll());
+        return $urlRecords;
     }
 }

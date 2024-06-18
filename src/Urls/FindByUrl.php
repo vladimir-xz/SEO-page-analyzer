@@ -2,6 +2,8 @@
 
 namespace Hexlet\Code\Urls;
 
+use Hexlet\Code\Url;
+
 class FindByUrl
 {
     public static function process($db, mixed $value)

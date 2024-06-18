@@ -46,14 +46,14 @@
                         <tbody>
                             <?php foreach ($urls as $url) : ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($url['id'])?></td>
+                                    <td><?= htmlspecialchars($url->id)?></td>
                                     <td>
-                                        <a href="/urls/<?= htmlspecialchars($url['id'])?>">
-                                            <?= htmlspecialchars($url['name'])?>
+                                        <a href="/urls/<?= htmlspecialchars($url->id)?>">
+                                            <?= htmlspecialchars($url->name)?>
                                         </a>
                                     </td>
-                                    <td><?= htmlspecialchars($url['last_check'] ?? '')?></th>
-                                    <td><?= htmlspecialchars($url['status_code'] ?? '')?></th>
+                                    <td><?= htmlspecialchars($url->lastCheck ?? '')?></th>
+                                    <td><?= htmlspecialchars($url->statusCode ?? '')?></th>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>

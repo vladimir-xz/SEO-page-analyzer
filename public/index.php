@@ -85,7 +85,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
     $dbHandler = new DbHandler('urls');
     $urlId = $args['url_id'];
     $url = $dbHandler->process('find by id', $urlId);
-    $checkResult = Check::process($url['name']);
+    $checkResult = Check::process($url->name);
     $results = ['url_id' => $urlId, 'status_code' => $checkResult];
     if (is_int($checkResult)) {
         $lastUrl = $dbHandler->process('insert check', $results);

@@ -40,28 +40,28 @@
         <?php endforeach?>
     <?php endif ?>
         <div class="container-lg">
-            <h1 class="mt-3">Сайт: <?= htmlspecialchars($url['name'])?></h1>
+            <h1 class="mt-3">Сайт: <?= htmlspecialchars($url->name)?></h1>
             <div class="row">
                 <div class="col">
                     <table class="table table-bordered table-responsive text-nowrap table-hover" data-test="url">
                         <tbody class="fw-normal">
                                 <tr>
                                     <td>ID</td>
-                                    <td><?= htmlspecialchars($url['id'])?></td>
+                                    <td><?= htmlspecialchars($url->id)?></td>
                                 <tr>
                                     <td>Имя</td>
-                                    <td><?= htmlspecialchars($url['name'])?></td>
+                                    <td><?= htmlspecialchars($url->name)?></td>
                                 </tr>
                                 <tr>
                                     <td>Дата создания</td>
-                                    <td><?= htmlspecialchars($url['created_at'])?></td>
+                                    <td><?= htmlspecialchars($url->createdAt)?></td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
             <h2 class="mt-5">Проверки</h2>
-            <form action="/urls/<?= htmlspecialchars($url['id'])?>/checks" class="my-3" method="post">
+            <form action="/urls/<?= htmlspecialchars($url->id)?>/checks" class="my-3" method="post">
                 <input type="submit" class="btn btn-primary" value="Запустить проверку">
             </form>
             <table class="table table-bordered table-responsive text-nowrap" data-test="checks">
@@ -80,22 +80,22 @@
                         <?php foreach ($checks as $check) : ?>
                             <tr>
                                 <td>
-                                    <?= htmlspecialchars($check['id'] ?? '') ?>
+                                    <?= htmlspecialchars($check->id ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check['status_code'] ?? '') ?>
+                                    <?= htmlspecialchars($check->statusCode ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check['h1'] ?? '') ?>
+                                    <?= htmlspecialchars($check->h1 ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check['title'] ?? '') ?>
+                                    <?= htmlspecialchars($check->title ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check['description'] ?? '') ?>
+                                    <?= htmlspecialchars($check->description ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check['created_at'] ?? '') ?>
+                                    <?= htmlspecialchars($check->createdAt ?? '') ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
