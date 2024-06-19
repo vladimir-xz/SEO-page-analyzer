@@ -26,9 +26,10 @@ class CheckParams
                 } else {
                     $result = $elements[0]->text();
                 }
+                $command = 'set' . $key;
+                $url->$command($result);
             }
-            $command = 'set' . $key;
-            $url->$command($result);
+            return;
         });
         return $url;
     }
