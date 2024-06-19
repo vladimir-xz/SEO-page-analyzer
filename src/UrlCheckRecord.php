@@ -22,7 +22,7 @@ class UrlCheckRecord extends UrlRecord
             $this->name = $checkRecord->name;
         } else {
             $this->id = $checkRecord['id'];
-            $this->urlId = $checkRecord['url_id'];
+            $this->urlId = $checkRecord['url_id'] ?? null;
             $this->name = $checkRecord['name'] ?? null;
             $this->createdAt = $checkRecord['created_at'] ?? null;
             $this->statusCode = $checkRecord['status_code'] ?? null;
