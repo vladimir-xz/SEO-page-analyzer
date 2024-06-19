@@ -1,5 +1,6 @@
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/vladimir-xz/php-project-9/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/vladimir-xz/php-project-9/actions)
+[![PHP CI](https://github.com/vladimir-xz/php-project-9/actions/workflows/php-cs.yml/badge.svg)](https://github.com/vladimir-xz/php-project-9/actions/workflows/php-cs.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/8c23c0674e98c889e1bb/maintainability)](https://codeclimate.com/github/vladimir-xz/php-project-9/maintainability)
 
 [My project][link]
