@@ -3,7 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\AnalyzeUrl;
+use Hexlet\Code\AnalyzeUrl\Engine;
 use Hexlet\Code\Check;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\Validator;
@@ -84,15 +84,15 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
+    $analyzer = new Engine('CheckConnection', 'CheckParams');
     $urlId = $args['url_id'];
     $url = $dbHandler->process('find by id', $urlId);
-    $checkResult = Check::process($url->name);
-    $results = ['url_id' => $urlId, 'status_code' => $checkResult];
-    if (is_int($checkResult)) {
-        $lastUrl = $dbHandler->process('insert check', $results);
-        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
-    } else {
+    $checkResult = $analyzer->process($url);
+    if (is_string($checkResult)) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
+    } else {
+        $lastUrl = $dbHandler->process('insert check', $checkResult);
+        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     }
     return $response->withRedirect($router->
     urlFor('url', ['id' => $urlId]), 302);

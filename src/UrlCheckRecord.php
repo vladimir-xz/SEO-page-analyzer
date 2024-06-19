@@ -2,25 +2,35 @@
 
 namespace Hexlet\Code;
 
-class UrlCheckRecord
+use Hexlet\Code\UrlRecord;
+
+use function PHPUnit\Framework\isInstanceOf;
+
+class UrlCheckRecord extends UrlRecord
 {
-    private $id;
     private $urlId;
     private $statusCode;
     private $h1;
     private $title;
     private $description;
-    private $createdAt;
+    private $lastCheck;
 
-    public function __construct(array $checkRecord)
+    public function __construct(UrlRecord|array $checkRecord)
     {
-        $this->id = $checkRecord['id'];
-        $this->urlId = $checkRecord['url_id'];
-        $this->statusCode = $checkRecord['status_code'] ?? null;
-        $this->h1 = $checkRecord['h1'] ?? null;
-        $this->title = $checkRecord['title'] ?? null;
-        $this->description = $checkRecord['description'] ?? null;
-        $this->createdAt = $checkRecord['created_at'] ?? null;
+        if ($checkRecord instanceof UrlRecord) {
+            $this->urlId = $checkRecord->id;
+            $this->name = $checkRecord->name;
+        } else {
+            $this->id = $checkRecord['id'];
+            $this->urlId = $checkRecord['url_id'];
+            $this->name = $checkRecord['name'] ?? null;
+            $this->createdAt = $checkRecord['created_at'] ?? null;
+            $this->statusCode = $checkRecord['status_code'] ?? null;
+            $this->h1 = $checkRecord['h1'] ?? null;
+            $this->title = $checkRecord['title'] ?? null;
+            $this->description = $checkRecord['description'] ?? null;
+            $this->lastCheck = $checkRecord['last_check'] ?? null;
+        }
     }
 
     public function __get($key)

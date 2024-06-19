@@ -4,9 +4,9 @@ namespace Hexlet\Code;
 
 class UrlRecord
 {
-    private $id;
-    private $name;
-    private $createdAt;
+    protected $id;
+    protected $name;
+    protected $createdAt;
 
     public function __construct(array $record)
     {

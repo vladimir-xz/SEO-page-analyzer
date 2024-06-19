@@ -1,24 +1,25 @@
 <?php
 
-namespace Hexlet\Code;
+namespace Hexlet\Code\AnalyzeUrl;
 
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
+use Hexlet\Code\UrlCheckRecord;
 
-class Check
+class CheckConnection
 {
-    public static function process(string $url)
+    public static function process(UrlCheckRecord $url)
     {
         try {
             $client = new Client();
-            $res = $client->request('GET', $url);
+            $res = $client->request('GET', $url->name);
             $status = $res->getStatusCode();
-            return $status;
         } catch (TransferException $e) {
-            return $e->getMessage();
+            throw new \Exception($e->getMessage());
         }
+        $url->setStatusCode($status);
     }
 }
