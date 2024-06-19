@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Urls;
+namespace Hexlet\Code\UrlsDatabase;
 
 use Carbon\Carbon;
 use Hexlet\Code\UrlRecord;
@@ -16,7 +16,6 @@ class InsertUrl
             'name' => $url,
             'created_at' => Carbon::now(),
         ]);
-        $url = new UrlRecord($db->lastInsertId());
-        return $url;
+        return $db->lastInsertId();
     }
 }

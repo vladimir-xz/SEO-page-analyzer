@@ -13,7 +13,15 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark" data-bs-theme="dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="/">Анализатор страниц</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <button 
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
                 <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -51,11 +59,22 @@
                                     Некорректный URL
                                 </div>
                             <?php else : ?>
-                                <input type="text" name='url[name]' id="validationServer03" class="form-control form-control-lg" placeholder="https://www.example.com" aria-describedby="validationServer03Feedback">
+                                <input 
+                                    type="text"
+                                    name='url[name]'
+                                    id="validationServer03"
+                                    class="form-control form-control-lg"
+                                    placeholder="https://www.example.com"
+                                    aria-describedby="validationServer03Feedback"
+                                >
                             <?php endif ?>
                         </div>
                         <div class="col-2">
-                            <input  type="submit" class="btn btn-lg btn-primary ms-3 mx-3 px-5 text-uppercase" value="Проверить">
+                            <input
+                                type="submit"
+                                class="btn btn-lg btn-primary ms-3 mx-3 px-5 text-uppercase"
+                                value="Проверить"
+                            >
                         </div>
                     </form>
                 </div>
