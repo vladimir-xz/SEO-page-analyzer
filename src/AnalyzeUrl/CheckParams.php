@@ -18,9 +18,12 @@ class CheckParams
 
     public static function process(UrlCheckRecord $url)
     {
-        $document = new Document($url->name, true);
-        Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
-            if (count($elements = $document->find($value)) > 0) {
+        try {
+            $document = new Document($url->name, true);
+            Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
+                if (count($elements = $document->find($value)) == 0) {
+                    return;
+                }
                 if ($key === 'Description') {
                     $result = $elements[0]->content;
                 } else {
@@ -28,9 +31,10 @@ class CheckParams
                 }
                 $command = 'set' . $key;
                 $url->$command($result);
-            }
-            return;
-        });
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
         return $url;
     }
 }
