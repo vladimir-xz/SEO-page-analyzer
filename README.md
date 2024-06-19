@@ -6,9 +6,7 @@
 
 <h1>SEO page analyzer</h1>
 <h3>by Vovan</h3>
-[Web page][link]
-
-[link]: https://php-project-9-uedt.onrender.com
+[Web page][(https://php-project-9-uedt.onrender.com)
 
 <h2>Description:</h2>
 
