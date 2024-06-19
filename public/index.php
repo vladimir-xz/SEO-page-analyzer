@@ -3,10 +3,10 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\AnalyzeUrl\Engine;
+use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
 use Hexlet\Code\Check;
 use Hexlet\Code\DbHandler;
-use Hexlet\Code\Validator;
+use Hexlet\Code\ValidateUrl;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -59,32 +59,29 @@ $app->get('/urls', function ($request, $response) use ($router) {
 })->setName('urls');
 
 $app->post('/urls', function ($request, $response) use ($router) {
-    $validator = new Validator();
     $dbHandler = new DbHandler('urls');
     $url = $request->getParsedBodyParam('url');
-    $errors = $validator->validate($url);
-    $existingUrl = $dbHandler->process('find by url', $url['name']);
-    if ($existingUrl) {
+    $errors = ValidateUrl::validate($url['name']);
+    if (count($errors) > 0) {
+        $params = [
+            'url' => $url['name'],
+            'errors' => $errors
+        ];
+        return $this->get('renderer')->render($response, "index.phtml", $params);
+    } elseif ($existingUrl = $dbHandler->process('find by url', $url['name'])) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
         urlFor('url', ['id' => $existingUrl]), 302);
-    } elseif (count($errors) === 0) {
-        $insertedId = $dbHandler->process('insert url', $url['name']);
-        $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
-        return $response->withRedirect($router->
-        urlFor('url', ['id' => $insertedId]), 302);
     }
-    $this->get('flash')->addMessage('error', 'Некорректный URL');
-    $params = [
-        'url' => $url['name'],
-        'errors' => $errors
-    ];
-    return $this->get('renderer')->render($response, "index.phtml", $params);
+    $insertedId = $dbHandler->process('insert url', $url['name']);
+    $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
+    return $response->withRedirect($router->
+        urlFor('url', ['id' => $insertedId]), 302);
 });
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
-    $analyzer = new Engine('CheckConnection', 'CheckParams');
+    $analyzer = new EngineAnalyze('Check Connection', 'Check Params');
     $urlId = $args['url_id'];
     $url = $dbHandler->process('find by id', $urlId);
     $checkResult = $analyzer->process($url);

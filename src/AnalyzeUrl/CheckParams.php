@@ -20,12 +20,11 @@ class CheckParams
     {
         $document = new Document($url->name, true);
         Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
-            $posts = $document->find($value);
-            foreach ($posts as $post) {
+            if (count($elements = $document->find($value)) > 0) {
                 if ($key === 'Description') {
-                    $result = $posts[0]->content;
+                    $result = $elements[0]->content;
                 } else {
-                    $result = $posts[0]->text();
+                    $result = $elements[0]->text();
                 }
             }
             $command = 'set' . $key;

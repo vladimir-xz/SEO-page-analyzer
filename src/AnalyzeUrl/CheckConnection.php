@@ -2,9 +2,6 @@
 
 namespace Hexlet\Code\AnalyzeUrl;
 
-use GuzzleHttp\Psr7;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use Hexlet\Code\UrlCheckRecord;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\Urls;
+namespace Hexlet\Code\UrlsDatabase;
 
 use Hexlet\Code\UrlCheckRecord;
 

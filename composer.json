@@ -12,7 +12,8 @@
         "slim/flash": "^0.4.0",
         "guzzlehttp/guzzle": "^7.8",
         "imangazaliev/didom": "^2.0",
-        "illuminate/support": "^11.11"
+        "illuminate/support": "^11.11",
+        "vlucas/valitron": "^1.4"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5",
