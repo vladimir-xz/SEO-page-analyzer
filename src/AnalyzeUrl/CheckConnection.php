@@ -14,6 +14,7 @@ class CheckConnection
             $client = new Client();
             $res = $client->request('GET', $url->name);
             $status = $res->getStatusCode();
+            $url->setHtmlBody($res->getBody()->__toString());
         } catch (TransferException $e) {
             throw new \Exception($e->getMessage());
         }

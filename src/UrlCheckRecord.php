@@ -10,6 +10,7 @@ class UrlCheckRecord extends UrlRecord
 {
     private $urlId;
     private $statusCode;
+    private $htmlBody;
     private $h1;
     private $title;
     private $description;
@@ -36,6 +37,11 @@ class UrlCheckRecord extends UrlRecord
     public function __get($key)
     {
         return $this->$key;
+    }
+
+    public function setHtmlBody($string)
+    {
+        $this->htmlBody = $string;
     }
 
     public function setStatusCode($code)

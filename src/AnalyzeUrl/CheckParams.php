@@ -5,8 +5,7 @@ namespace Hexlet\Code\AnalyzeUrl;
 use DiDom\Document;
 use Illuminate\Support\Arr;
 use Hexlet\Code\UrlCheckRecord;
-
-use function PHPUnit\Framework\isEmpty;
+use Hexlet\Code\AnalyzeUrl\CurlHelper;
 
 class CheckParams
 {
@@ -18,8 +17,12 @@ class CheckParams
 
     public static function process(UrlCheckRecord $url)
     {
+        if (!$url->htmlBody) {
+            $htmlBody = CurlHelper::getHtml($url->name);
+            $url->setHtmlBody($htmlBody);
+        }
         try {
-            $document = new Document($url->name, true);
+            $document = new Document($url->htmlBody);
             Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
                 if (count($elements = $document->find($value)) == 0) {
                     return;
