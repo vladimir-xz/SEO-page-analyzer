@@ -33,6 +33,7 @@ class CheckParams
                 $url->$command($result);
             });
         } catch (\Exception $e) {
+            // solving problem
             return $e->getMessage();
         }
         return $url;
