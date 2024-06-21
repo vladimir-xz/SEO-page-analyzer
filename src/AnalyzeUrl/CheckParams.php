@@ -17,6 +17,7 @@ class CheckParams
 
     public static function process(UrlCheck $url)
     {
+        var_dump($url);
         if (!$url->getHtmlBody()) {
             $htmlBody = GetHtmlWithCurl::getHtml($url->getName());
             $url->setHtmlBody($htmlBody);
