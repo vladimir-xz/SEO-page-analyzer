@@ -2,8 +2,8 @@
 
 namespace Hexlet\Code\AnalyzeUrl;
 
-use Hexlet\Code\UrlCheckRecord;
-use Hexlet\Code\UrlRecord;
+use Hexlet\Code\UrlCheck;
+use Hexlet\Code\Url;
 use Illuminate\Support\Str;
 
 class EngineAnalyze
@@ -20,10 +20,10 @@ class EngineAnalyze
         $this->analyzers = $analyzersClasses;
     }
 
-    public function process(UrlRecord $url)
+    public function process(Url $url)
     {
         try {
-            $urlCheck = new UrlCheckRecord($url);
+            $urlCheck = new UrlCheck($url);
             foreach ($this->analyzers as $method) {
                 $method->process($urlCheck);
             }

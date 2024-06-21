@@ -4,11 +4,11 @@ namespace Hexlet\Code\AnalyzeUrl;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
-use Hexlet\Code\UrlCheckRecord;
+use Hexlet\Code\UrlCheck;
 
 class CheckConnection
 {
-    public static function process(UrlCheckRecord $url)
+    public static function process(UrlCheck $url)
     {
         try {
             $client = new Client();

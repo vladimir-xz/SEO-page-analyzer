@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code\UrlsDatabase;
 
-use Hexlet\Code\UrlRecord;
+use Hexlet\Code\Url;
 
 class FindById
 {
@@ -14,6 +14,6 @@ class FindById
         $sth = $db->prepare($sql);
         $sth->execute(['val' => $value]);
         $red = $sth->fetch();
-        return new UrlRecord($red);
+        return new Url($red);
     }
 }

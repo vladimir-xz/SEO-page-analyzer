@@ -3,11 +3,11 @@
 namespace Hexlet\Code\UrlsDatabase;
 
 use Carbon\Carbon;
-use Hexlet\Code\UrlCheckRecord;
+use Hexlet\Code\UrlCheck;
 
 class InsertCheck
 {
-    public static function process(\PDO $db, UrlCheckRecord $url)
+    public static function process(\PDO $db, UrlCheck $url)
     {
         $sql = 'INSERT INTO url_checks (
             url_id,
@@ -35,28 +35,3 @@ class InsertCheck
         return;
     }
 }
-
-// $sql = 'INSERT INTO url_checks (
-//     url_id,
-//     status_code,
-//     h1,
-//     title,
-//     description,
-//     created_at)
-//         VALUES (
-//         :url_id,
-//         :status_code,
-//         :h1,
-//         :title,
-//         :description,
-//         :created_at)';
-// $sth = $db->prepare($sql);
-// $sth->execute([
-//     'url_id' => $url->urlId,
-//     'status_code' => $url->statusCode,
-//     'h1' => $url->h1,
-//     'title' => $url->title,
-//     'description' => $url->description,
-//     'created_at' => Carbon::now(),
-// ]);
-// return

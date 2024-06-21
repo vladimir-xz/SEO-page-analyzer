@@ -3,7 +3,6 @@
 namespace Hexlet\Code\UrlsDatabase;
 
 use Carbon\Carbon;
-use Hexlet\Code\UrlRecord;
 
 class InsertUrl
 {

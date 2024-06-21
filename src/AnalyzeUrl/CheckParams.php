@@ -4,7 +4,7 @@ namespace Hexlet\Code\AnalyzeUrl;
 
 use DiDom\Document;
 use Illuminate\Support\Arr;
-use Hexlet\Code\UrlCheckRecord;
+use Hexlet\Code\UrlCheck;
 use Hexlet\Code\AnalyzeUrl\CurlHelper;
 
 class CheckParams
@@ -15,7 +15,7 @@ class CheckParams
         'Description' => 'meta[name=description]'
     ];
 
-    public static function process(UrlCheckRecord $url)
+    public static function process(UrlCheck $url)
     {
         if (!$url->getHtmlBody()) {
             $htmlBody = CurlHelper::getHtml($url->getName());

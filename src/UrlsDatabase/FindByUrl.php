@@ -2,8 +2,6 @@
 
 namespace Hexlet\Code\UrlsDatabase;
 
-use Hexlet\Code\Url;
-
 class FindByUrl
 {
     public static function process(\PDO $db, string $value)

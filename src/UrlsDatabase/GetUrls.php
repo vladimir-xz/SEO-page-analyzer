@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code\UrlsDatabase;
 
-use Hexlet\Code\UrlCheckRecord;
+use Hexlet\Code\UrlAndCheck;
 
 class GetUrls
 {
@@ -28,7 +28,7 @@ class GetUrls
                 ORDER BY urls.id DESC';
         $sth = $db->prepare($sql);
         $sth->execute();
-        $urlRecords = array_map(fn($rec) => new UrlCheckRecord($rec), $sth->fetchAll());
+        $urlRecords = array_map(fn($rec) => new UrlAndCheck($rec), $sth->fetchAll());
         return $urlRecords;
     }
 }

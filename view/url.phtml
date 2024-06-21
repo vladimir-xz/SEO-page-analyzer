@@ -91,19 +91,19 @@
                                     <?= htmlspecialchars($check->getId()) ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->getStatusCode()) ?>
+                                    <?= htmlspecialchars($check->getStatusCode() ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->getH1()) ?>
+                                    <?= htmlspecialchars($check->getH1() ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->getTitle()) ?>
+                                    <?= htmlspecialchars($check->getTitle() ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->getDescription()) ?>
+                                    <?= htmlspecialchars($check->getDescription() ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->getCreatedAt()) ?>
+                                    <?= htmlspecialchars($check->getCreatedAt() ?? '') ?>
                                 </td>
                             </tr>
                         <?php endforeach ?>
