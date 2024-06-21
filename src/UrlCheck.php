@@ -6,13 +6,12 @@ use Hexlet\Code\Url;
 
 class UrlCheck extends Url
 {
-    private ?int $urlId;
+    private int $urlId;
     private ?int $statusCode;
     private ?string $htmlBody;
     private ?string $h1;
     private ?string $title;
     private ?string $description;
-    private ?string $lastCheck;
 
     public function __construct(Url|array $checkRecord)
     {
@@ -40,7 +39,7 @@ class UrlCheck extends Url
         if (isset($this->statusCode)) {
             return $this->statusCode;
         }
-        return null;
+        return '';
     }
 
     public function getHtmlBody()
@@ -48,7 +47,7 @@ class UrlCheck extends Url
         if (isset($this->htmlBody)) {
             return $this->htmlBody;
         }
-        return null;
+        return '';
     }
 
     public function getH1()
@@ -56,7 +55,7 @@ class UrlCheck extends Url
         if (isset($this->h1)) {
             return $this->h1;
         }
-        return null;
+        return '';
     }
 
     public function getTitle()
@@ -64,7 +63,7 @@ class UrlCheck extends Url
         if (isset($this->title)) {
             return $this->title;
         }
-        return null;
+        return '';
     }
 
     public function getDescription()
@@ -72,15 +71,7 @@ class UrlCheck extends Url
         if (isset($this->description)) {
             return $this->description;
         }
-        return null;
-    }
-
-    public function getLastCheck()
-    {
-        if (isset($this->lastCheck)) {
-            return $this->lastCheck;
-        }
-        return null;
+        return '';
     }
 
     public function setHtmlBody(string $string)

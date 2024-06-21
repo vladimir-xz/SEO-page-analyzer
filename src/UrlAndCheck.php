@@ -13,8 +13,8 @@ class UrlAndCheck extends Url
     {
         $this->id = $checkRecord['id'];
         $this->name = $checkRecord['name'];
-        $this->statusCode = $checkRecord['status_code'] ?? null;
-        $this->lastCheck = $checkRecord['last_check'] ?? null;
+        $this->statusCode = $checkRecord['status_code'];
+        $this->lastCheck = $checkRecord['last_check'];
     }
 
     public function getStatusCode()
@@ -22,7 +22,7 @@ class UrlAndCheck extends Url
         if (isset($this->statusCode)) {
             return $this->statusCode;
         }
-        return null;
+        return '';
     }
 
     public function getLastCheck()
@@ -30,6 +30,6 @@ class UrlAndCheck extends Url
         if (isset($this->lastCheck)) {
             return $this->lastCheck;
         }
-        return null;
+        return '';
     }
 }
