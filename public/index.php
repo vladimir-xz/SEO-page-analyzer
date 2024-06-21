@@ -72,7 +72,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
     $insertedId = $dbHandler->process('insert url', $url['name']);
     $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
     return $response->withRedirect($router->
-        urlFor('url', ['id' => $insertedId]), 302);
+        urlFor('url', ['id' => $insertedId]), 303);
 });
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
@@ -91,7 +91,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     }
     return $response->withRedirect($router->
-    urlFor('url', ['id' => $urlId]), 302);
+    urlFor('url', ['id' => $urlId]), 303);
 });
 
 $app->run();
