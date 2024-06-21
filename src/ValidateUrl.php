@@ -21,8 +21,7 @@ class ValidateUrl
         $v->rules(self::$rules);
         if ($v->validate()) {
             return [];
-        } else {
-            return $v->errors();
         }
+        return $v->errors();
     }
 }

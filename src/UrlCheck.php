@@ -47,7 +47,7 @@ class UrlCheck extends Url
         if (isset($this->htmlBody)) {
             return $this->htmlBody;
         }
-        return '';
+        return null;
     }
 
     public function getH1()

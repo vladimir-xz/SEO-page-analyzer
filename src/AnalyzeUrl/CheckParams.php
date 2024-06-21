@@ -18,7 +18,7 @@ class CheckParams
     public static function process(UrlCheck $url)
     {
         if (!$url->getHtmlBody()) {
-            $htmlBody = CurlHelper::getHtml($url->getName());
+            $htmlBody = GetHtmlWithCurl::getHtml($url->getName());
             $url->setHtmlBody($htmlBody);
         }
         try {
@@ -26,8 +26,7 @@ class CheckParams
             Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
                 if (count($elements = $document->find($value)) == 0) {
                     return;
-                }
-                if ($key === 'Description') {
+                } elseif ($key === 'Description') {
                     $result = optional($elements[0])->content;
                 } else {
                     $result = optional($elements[0])->text();
@@ -36,8 +35,7 @@ class CheckParams
                 $url->$command($result);
             });
         } catch (\Exception $e) {
-            // solving problem
-            return $e->getMessage();
+            throw new \Exception($e->getMessage());
         }
         return $url;
     }

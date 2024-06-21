@@ -3,7 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\AnalyzeUrl\AnalyzeEngine;
+use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\ValidateUrl;
 
@@ -77,7 +77,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
-    $analyzer = new AnalyzeEngine('Check Connection', 'Check Params');
+    $analyzer = new EngineAnalyze('Check Connection', 'Check Params');
     $urlId = $args['url_id'];
     $url = $dbHandler->process('find by id', $urlId);
     if (!$url) {
@@ -87,7 +87,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
     if ($checkResult instanceof \Exception) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     } else {
-        $lastUrl = $dbHandler->process('insert check', $checkResult);
+        $dbHandler->process('insert check', $checkResult);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     }
     return $response->withRedirect($router->

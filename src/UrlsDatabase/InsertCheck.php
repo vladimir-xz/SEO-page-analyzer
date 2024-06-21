@@ -32,6 +32,5 @@ class InsertCheck
             'description' => $url->getDescription(),
             'created_at' => Carbon::now(),
         ]);
-        return;
     }
 }

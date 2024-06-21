@@ -2,7 +2,7 @@
 
 namespace Hexlet\Code\AnalyzeUrl;
 
-class CurlHelper
+class GetHtmlWithCurl
 {
     public static function getHtml(string $url)
     {

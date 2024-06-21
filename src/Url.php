@@ -5,8 +5,8 @@ namespace Hexlet\Code;
 class Url
 {
     protected int $id;
-    protected ?string $name;
-    protected ?string $createdAt;
+    protected string $name;
+    protected string $createdAt;
 
     public function __construct(array $record)
     {
