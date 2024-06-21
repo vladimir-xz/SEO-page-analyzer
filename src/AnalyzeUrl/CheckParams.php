@@ -28,9 +28,9 @@ class CheckParams
                     return;
                 }
                 if ($key === 'Description') {
-                    $result = $elements[0]->content;
+                    $result = optional($elements[0])->content;
                 } else {
-                    $result = $elements[0]->text();
+                    $result = optional($elements[0])->text();
                 }
                 $command = 'set' . $key;
                 $url->$command($result);

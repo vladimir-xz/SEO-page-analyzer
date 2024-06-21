@@ -85,22 +85,22 @@ class UrlCheckRecord extends UrlRecord
         return null;
     }
 
-    public function setHtmlBody($string)
+    public function setHtmlBody(string $string)
     {
         $this->htmlBody = $string;
     }
 
-    public function setStatusCode($code)
+    public function setStatusCode(int $code)
     {
         $this->statusCode = $code;
     }
 
-    public function setH1($h1)
+    public function setH1(string $h1)
     {
         $this->h1 = $h1;
     }
 
-    public function setTitle($title)
+    public function setTitle(string $title)
     {
         $this->title = $title;
     }
