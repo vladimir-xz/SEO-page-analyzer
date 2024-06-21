@@ -15,9 +15,9 @@ class CheckConnection
             $res = $client->request('GET', $url->getName(), ['connect_timeout' => 3.14]);
             $status = $res->getStatusCode();
             $url->setHtmlBody($res->getBody()->__toString());
+            $url->setStatusCode($status);
         } catch (TransferException $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
-        $url->setStatusCode($status);
     }
 }

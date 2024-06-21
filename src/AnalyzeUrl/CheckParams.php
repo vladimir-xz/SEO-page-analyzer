@@ -35,8 +35,7 @@ class CheckParams
                 $url->$command($result);
             });
         } catch (\Exception $e) {
-            throw new \Exception($e->getMessage());
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
-        return $url;
     }
 }

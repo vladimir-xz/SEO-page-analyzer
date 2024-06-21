@@ -17,11 +17,15 @@ class ValidateUrl
 
     public static function validate(string $url): array
     {
-        $v = new Validator(['url' => $url]);
-        $v->rules(self::$rules);
-        if ($v->validate()) {
-            return [];
+        try {
+            $v = new Validator(['url' => $url]);
+            $v->rules(self::$rules);
+            if ($v->validate()) {
+                return [];
+            }
+            return $v->errors();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
         }
-        return $v->errors();
     }
 }

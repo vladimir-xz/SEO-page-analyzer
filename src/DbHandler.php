@@ -14,26 +14,18 @@ class DbHandler
     public function __construct(
         string $databaseName
     ) {
-        try {
-            $this->dbName = ucfirst($databaseName) . 'Database';
-            $DbClass = 'Hexlet\\Code\\' . $this->dbName . '\\Connect';
-            $database = $DbClass::get()->connect();
-            $this->db = $database;
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $this->dbName = ucfirst($databaseName) . 'Database';
+        $DbClass = 'Hexlet\\Code\\' . $this->dbName . '\\Connect';
+        $database = $DbClass::get()->connect();
+        $this->db = $database;
     }
 
     public function process(
         string $action,
         mixed $value = null
     ) {
-        try {
-            $properName = Str::of($action)->camel()->ucfirst();
-            $actionClass = 'Hexlet\\Code\\' . $this->dbName . '\\' . $properName;
-            return $actionClass::process($this->db, $value);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $properName = Str::of($action)->camel()->ucfirst();
+        $actionClass = 'Hexlet\\Code\\' . $this->dbName . '\\' . $properName;
+        return $actionClass::process($this->db, $value);
     }
 }

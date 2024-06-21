@@ -27,9 +27,9 @@ class EngineAnalyze
             foreach ($this->analyzers as $method) {
                 $method->process($urlCheck);
             }
+            return $urlCheck;
         } catch (\Exception $e) {
-            return $e;
+            return $e->getCode();
         }
-        return $urlCheck;
     }
 }
