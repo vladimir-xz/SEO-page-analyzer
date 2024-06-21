@@ -7,7 +7,7 @@ use Hexlet\Code\UrlRecord;
 
 class InsertUrl
 {
-    public static function process($db, string $url)
+    public static function process(\PDO $db, string $url)
     {
         $sql = 'INSERT INTO urls (name, created_at)
                 VALUES (:name, :created_at)';

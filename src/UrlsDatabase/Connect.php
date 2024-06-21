@@ -32,10 +32,10 @@ class Connect
 
     public static function get()
     {
-        if (null === static::$conn) {
-            static::$conn = new self();
+        if (null === self::$conn) {
+            self::$conn = new self();
         }
 
-        return static::$conn;
+        return self::$conn;
     }
 }

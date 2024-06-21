@@ -105,7 +105,7 @@ class UrlCheckRecord extends UrlRecord
         $this->title = $title;
     }
 
-    public function setDescription($description)
+    public function setDescription(string $description)
     {
         $this->description = $description;
     }
