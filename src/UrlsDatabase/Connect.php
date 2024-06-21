@@ -15,11 +15,11 @@ class Connect
 
         $conStr = sprintf(
             "pgsql:host=%s;port=%d;dbname=%s;user=%s;password=%s",
-            $databaseUrl['host'],
-            $databaseUrl['port'],
-            ltrim($databaseUrl['path'], '/'),
-            $databaseUrl['user'],
-            $databaseUrl['pass']
+            $databaseUrl['host?'],
+            $databaseUrl['port?'],
+            ltrim($databaseUrl['path?'], '/'),
+            $databaseUrl['user?'],
+            $databaseUrl['pass?']
         );
 
         // $conStr = "pgsql:host=localhost;port=5432;dbname=mydb;user=vova_xz;password=gnom";
