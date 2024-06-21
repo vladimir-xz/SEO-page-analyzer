@@ -6,7 +6,7 @@ use Hexlet\Code\UrlCheck;
 use Hexlet\Code\Url;
 use Illuminate\Support\Str;
 
-class EngineAnalyze
+class AnalyzeEngine
 {
     private array $analyzers;
 

@@ -21,14 +21,12 @@ class UrlCheck extends Url
             $this->name = $checkRecord->getName();
         } else {
             $this->id = $checkRecord['id'];
-            $this->urlId = $checkRecord['url_id'] ?? null;
-            $this->name = $checkRecord['name'] ?? null;
-            $this->createdAt = $checkRecord['created_at'] ?? null;
-            $this->statusCode = $checkRecord['status_code'] ?? null;
-            $this->h1 = $checkRecord['h1'] ?? null;
-            $this->title = $checkRecord['title'] ?? null;
-            $this->description = $checkRecord['description'] ?? null;
-            $this->lastCheck = $checkRecord['last_check'] ?? null;
+            $this->urlId = $checkRecord['url_id'];
+            $this->createdAt = $checkRecord['created_at'];
+            $this->statusCode = $checkRecord['status_code'];
+            $this->h1 = $checkRecord['h1'];
+            $this->title = $checkRecord['title'];
+            $this->description = $checkRecord['description'];
         }
     }
 

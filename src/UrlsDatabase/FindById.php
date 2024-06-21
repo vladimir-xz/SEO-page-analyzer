@@ -14,6 +14,9 @@ class FindById
         $sth = $db->prepare($sql);
         $sth->execute(['val' => $value]);
         $red = $sth->fetch();
-        return new Url($red);
+        if ($red) {
+            return new Url($red);
+        }
+        return $red;
     }
 }

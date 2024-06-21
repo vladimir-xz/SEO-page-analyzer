@@ -3,8 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
-use Hexlet\Code\Check;
+use Hexlet\Code\AnalyzeUrl\AnalyzeEngine;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\ValidateUrl;
 
@@ -26,13 +25,7 @@ $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response) {
-    $messages = $this->get('flash')->getMessages();
-    $url = $request->getParsedBodyParam('url');
-    $params = [
-        'flash' => $messages,
-        'url' => $url
-    ];
-    return $this->get('renderer')->render($response, 'index.phtml', $params);
+    return $this->get('renderer')->render($response, 'index.phtml');
 })->setName('main');
 
 $app->get('/urls/{id}', function ($request, $response, $args) {
@@ -40,7 +33,10 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
     $url = $dbHandler->process('find by id', $id);
-    $checkRecords = $dbHandler->process('getCheckRecords', $id);
+    if (!$url) {
+        return $response->withStatus(404);
+    }
+    $checkRecords = $dbHandler->process('get check records', $id);
     $params = [
         'url' => $url,
         'checks' => $checkRecords,
@@ -81,9 +77,12 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
-    $analyzer = new EngineAnalyze('Check Connection', 'Check Params');
+    $analyzer = new AnalyzeEngine('Check Connection', 'Check Params');
     $urlId = $args['url_id'];
     $url = $dbHandler->process('find by id', $urlId);
+    if (!$url) {
+        return $response->withStatus(404);
+    }
     $checkResult = $analyzer->process($url);
     if (is_string($checkResult)) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
