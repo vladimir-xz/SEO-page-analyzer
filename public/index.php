@@ -67,7 +67,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
             'url' => $url['name'],
             'errors' => $errors
         ];
-        return $this->get('renderer')->render($response, "index.phtml", $params);
+        return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     } elseif ($existingUrl = $dbHandler->process('find by url', $url['name'])) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
