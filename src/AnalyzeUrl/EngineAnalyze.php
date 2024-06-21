@@ -29,7 +29,7 @@ class EngineAnalyze
             }
             return $urlCheck;
         } catch (\Exception $e) {
-            return $e->getCode();
+            return $e;
         }
     }
 }
