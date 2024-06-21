@@ -6,7 +6,7 @@ use Hexlet\Code\UrlRecord;
 
 class FindById
 {
-    public static function process($db, mixed $value)
+    public static function process(\PDO $db, int $value)
     {
         $sql = 'SELECT *
                 FROM urls

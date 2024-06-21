@@ -25,7 +25,7 @@ $app->addErrorMiddleware(true, true, true);
 $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
-$app->get('/', function ($request, $response) use ($router) {
+$app->get('/', function ($request, $response) {
     $messages = $this->get('flash')->getMessages();
     $url = $request->getParsedBodyParam('url');
     $params = [
@@ -35,7 +35,7 @@ $app->get('/', function ($request, $response) use ($router) {
     return $this->get('renderer')->render($response, 'index.phtml', $params);
 })->setName('main');
 
-$app->get('/urls/{id}', function ($request, $response, $args) use ($router) {
+$app->get('/urls/{id}', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
@@ -49,7 +49,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) use ($router) {
     return $this->get('renderer')->render($response, 'url.phtml', $params);
 })->setName('url');
 
-$app->get('/urls', function ($request, $response) use ($router) {
+$app->get('/urls', function ($request, $response) {
     $dbHandler = new DbHandler('urls');
     $urls = $dbHandler->process('get urls');
     $params = [

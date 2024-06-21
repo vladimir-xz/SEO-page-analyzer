@@ -12,7 +12,7 @@ class CheckConnection
     {
         try {
             $client = new Client();
-            $res = $client->request('GET', $url->name);
+            $res = $client->request('GET', $url->getName());
             $status = $res->getStatusCode();
             $url->setHtmlBody($res->getBody()->__toString());
         } catch (TransferException $e) {

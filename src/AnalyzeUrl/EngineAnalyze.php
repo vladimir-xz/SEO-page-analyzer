@@ -3,13 +3,14 @@
 namespace Hexlet\Code\AnalyzeUrl;
 
 use Hexlet\Code\UrlCheckRecord;
+use Hexlet\Code\UrlRecord;
 use Illuminate\Support\Str;
 
 class EngineAnalyze
 {
-    private $analyzers;
+    private array $analyzers;
 
-    public function __construct(...$analyzers)
+    public function __construct(string ...$analyzers)
     {
         $analyzersClasses = array_map(function ($name) {
             $properName = Str::of($name)->camel()->ucfirst();
@@ -19,7 +20,7 @@ class EngineAnalyze
         $this->analyzers = $analyzersClasses;
     }
 
-    public function process($url)
+    public function process(UrlRecord $url)
     {
         try {
             $urlCheck = new UrlCheckRecord($url);

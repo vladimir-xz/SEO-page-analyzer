@@ -6,7 +6,7 @@ use Valitron\Validator;
 
 class ValidateUrl
 {
-    private static $rules = [
+    private static array $rules = [
         'url' => [
             ['url']
         ],

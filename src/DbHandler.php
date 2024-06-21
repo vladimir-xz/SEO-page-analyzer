@@ -8,11 +8,11 @@ use Hexlet\Code\Database\InsertUrl;
 
 class DbHandler
 {
-    private $dbName;
-    private $db;
+    private string $dbName;
+    private \PDO $db;
 
     public function __construct(
-        $databaseName
+        string $databaseName
     ) {
         try {
             $this->dbName = ucfirst($databaseName) . 'Database';
@@ -25,8 +25,8 @@ class DbHandler
     }
 
     public function process(
-        $action,
-        $value = null
+        string $action,
+        mixed $value = null
     ) {
         try {
             $properName = Str::of($action)->camel()->ucfirst();

@@ -9,7 +9,7 @@ use Hexlet\Code\AnalyzeUrl\CurlHelper;
 
 class CheckParams
 {
-    private static $analyzeParams = [
+    private static array $analyzeParams = [
         'H1' => 'h1',
         'Title' => 'title',
         'Description' => 'meta[name=description]'
@@ -17,12 +17,12 @@ class CheckParams
 
     public static function process(UrlCheckRecord $url)
     {
-        if (!$url->htmlBody) {
-            $htmlBody = CurlHelper::getHtml($url->name);
+        if (!$url->getHtmlBody()) {
+            $htmlBody = CurlHelper::getHtml($url->getName());
             $url->setHtmlBody($htmlBody);
         }
         try {
-            $document = new Document($url->htmlBody);
+            $document = new Document($url->getHtmlBody());
             Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
                 if (count($elements = $document->find($value)) == 0) {
                     return;

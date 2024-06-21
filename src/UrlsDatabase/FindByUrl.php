@@ -6,7 +6,7 @@ use Hexlet\Code\Url;
 
 class FindByUrl
 {
-    public static function process($db, mixed $value)
+    public static function process(\PDO $db, string $value)
     {
         $sql = 'SELECT id
                 FROM urls

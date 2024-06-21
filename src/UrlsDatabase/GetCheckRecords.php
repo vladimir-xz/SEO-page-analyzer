@@ -6,7 +6,7 @@ use Hexlet\Code\UrlCheckRecord;
 
 class GetCheckRecords
 {
-    public static function process($db, $urlId)
+    public static function process(\PDO $db, int $urlId)
     {
         $sql = 'SELECT *
                 FROM url_checks

@@ -4,9 +4,9 @@ namespace Hexlet\Code;
 
 class UrlRecord
 {
-    protected $id;
-    protected $name;
-    protected $createdAt;
+    protected int $id;
+    protected ?string $name;
+    protected ?string $createdAt;
 
     public function __construct(array $record)
     {
@@ -15,8 +15,18 @@ class UrlRecord
         $this->createdAt = $record['created_at'];
     }
 
-    public function __get($key)
+    public function getId()
     {
-        return $this->$key;
+        return $this->id;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
     }
 }

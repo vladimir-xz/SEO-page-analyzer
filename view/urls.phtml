@@ -54,14 +54,14 @@
                         <tbody>
                             <?php foreach ($urls as $url) : ?>
                                 <tr>
-                                    <td><?= htmlspecialchars($url->id)?></td>
+                                    <td><?= htmlspecialchars($url->getId())?></td>
                                     <td>
-                                        <a href="/urls/<?= htmlspecialchars($url->id)?>">
-                                            <?= htmlspecialchars($url->name)?>
+                                        <a href="/urls/<?= htmlspecialchars($url->getId())?>">
+                                            <?= htmlspecialchars($url->getName())?>
                                         </a>
                                     </td>
-                                    <td><?= htmlspecialchars($url->lastCheck ?? '')?></th>
-                                    <td><?= htmlspecialchars($url->statusCode ?? '')?></th>
+                                    <td><?= htmlspecialchars($url->getLastCheck())?></th>
+                                    <td><?= htmlspecialchars($url->getStatusCode())?></th>
                                 </tr>
                             <?php endforeach ?>
                         </tbody>
