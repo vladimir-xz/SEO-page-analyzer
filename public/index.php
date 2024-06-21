@@ -84,7 +84,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         return $response->withStatus(404);
     }
     $checkResult = $analyzer->process($url);
-    if (is_string($checkResult)) {
+    if ($checkResult instanceof \Exception) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     } else {
         $lastUrl = $dbHandler->process('insert check', $checkResult);

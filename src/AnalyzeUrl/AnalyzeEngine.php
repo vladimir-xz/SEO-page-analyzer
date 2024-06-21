@@ -28,7 +28,7 @@ class AnalyzeEngine
                 $method->process($urlCheck);
             }
         } catch (\Exception $e) {
-            return $e->getMessage();
+            return $e;
         }
         return $urlCheck;
     }
