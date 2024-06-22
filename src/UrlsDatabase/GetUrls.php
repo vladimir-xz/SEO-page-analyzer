@@ -2,8 +2,6 @@
 
 namespace Hexlet\Code\UrlsDatabase;
 
-use Hexlet\Code\UrlAndCheck;
-
 class GetUrls
 {
     public static function process(\PDO $db)
@@ -29,8 +27,7 @@ class GetUrls
                     ORDER BY urls.id DESC';
             $sth = $db->prepare($sql);
             $sth->execute();
-            $urlRecords = array_map(fn($rec) => new UrlAndCheck($rec), $sth->fetchAll());
-            return $urlRecords;
+            return $sth->fetchAll();
         } catch (\PDOException $e) {
             echo 'Ошибка выполнения запроса: ' . $e->getMessage();
         }

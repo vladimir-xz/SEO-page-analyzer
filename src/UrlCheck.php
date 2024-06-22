@@ -4,29 +4,20 @@ namespace Hexlet\Code;
 
 use Hexlet\Code\Url;
 
-class UrlCheck extends Url
+class UrlCheck
 {
     private int $urlId;
+    private string $name;
     private ?int $statusCode;
     private ?string $htmlBody;
     private ?string $h1;
     private ?string $title;
     private ?string $description;
 
-    public function __construct(Url|array $checkRecord)
+    public function __construct(object $checkRecord)
     {
-        if ($checkRecord instanceof Url) {
-            $this->urlId = $checkRecord->getId();
-            $this->name = $checkRecord->getName();
-        } else {
-            $this->id = $checkRecord['id'];
-            $this->urlId = $checkRecord['url_id'];
-            $this->createdAt = $checkRecord['created_at'];
-            $this->statusCode = $checkRecord['status_code'];
-            $this->h1 = $checkRecord['h1'];
-            $this->title = $checkRecord['title'];
-            $this->description = $checkRecord['description'];
-        }
+        $this->urlId = $checkRecord->id;
+        $this->name = $checkRecord->name;
     }
 
     public function getUrlId()
@@ -34,12 +25,17 @@ class UrlCheck extends Url
         return $this->urlId;
     }
 
+    public function getName()
+    {
+        return $this->name;
+    }
+
     public function getStatusCode()
     {
         if (isset($this->statusCode)) {
             return $this->statusCode;
         }
-        return '';
+        return null;
     }
 
     public function getHtmlBody()
@@ -55,7 +51,7 @@ class UrlCheck extends Url
         if (isset($this->h1)) {
             return $this->h1;
         }
-        return '';
+        return null;
     }
 
     public function getTitle()
@@ -63,7 +59,7 @@ class UrlCheck extends Url
         if (isset($this->title)) {
             return $this->title;
         }
-        return '';
+        return null;
     }
 
     public function getDescription()
@@ -71,7 +67,7 @@ class UrlCheck extends Url
         if (isset($this->description)) {
             return $this->description;
         }
-        return '';
+        return null;
     }
 
     public function setHtmlBody(string $string)
