@@ -3,8 +3,6 @@
 namespace Hexlet\Code;
 
 use Illuminate\Support\Str;
-use Hexlet\Code\Database\ConnectUrl;
-use Hexlet\Code\Database\InsertUrl;
 
 class DbHandler
 {

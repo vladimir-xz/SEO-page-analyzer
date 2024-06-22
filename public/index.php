@@ -5,7 +5,7 @@ use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
 use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
 use Hexlet\Code\DbHandler;
-use Hexlet\Code\ValidateUrl;
+use Hexlet\Code\PrepareUrl;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -55,24 +55,28 @@ $app->get('/urls', function ($request, $response) {
 })->setName('urls');
 
 $app->post('/urls', function ($request, $response) use ($router) {
-    $dbHandler = new DbHandler('urls');
     $url = $request->getParsedBodyParam('url');
-    $errors = ValidateUrl::validate($url['name']);
+    $errors = PrepareUrl\Validate::validate($url['name']);
     if (count($errors) > 0) {
         $params = [
             'url' => $url['name'],
             'errors' => $errors
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
-    } elseif ($existingUrl = $dbHandler->process('find by url', $url['name'])) {
+    }
+    $dbHandler = new DbHandler('urls');
+    $normalizedUrl = PrepareUrl\Normalize::process($url['name']);
+    $existingUrl = $dbHandler->process('find by url', $normalizedUrl);
+    if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
         urlFor('url', ['id' => $existingUrl]), 302);
+    } else {
+        $insertedId = $dbHandler->process('insert url', $normalizedUrl);
+        $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
+        return $response->withRedirect($router->
+            urlFor('url', ['id' => $insertedId]), 303);
     }
-    $insertedId = $dbHandler->process('insert url', $url['name']);
-    $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
-    return $response->withRedirect($router->
-        urlFor('url', ['id' => $insertedId]), 303);
 });
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {

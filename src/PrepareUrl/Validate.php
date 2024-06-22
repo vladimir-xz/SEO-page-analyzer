@@ -1,10 +1,10 @@
 <?php
 
-namespace Hexlet\Code;
+namespace Hexlet\Code\PrepareUrl;
 
 use Valitron\Validator;
 
-class ValidateUrl
+class Validate
 {
     private static array $rules = [
         'url' => [

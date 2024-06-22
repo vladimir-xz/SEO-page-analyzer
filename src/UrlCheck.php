@@ -2,8 +2,6 @@
 
 namespace Hexlet\Code;
 
-use Hexlet\Code\Url;
-
 class UrlCheck
 {
     private int $urlId;
