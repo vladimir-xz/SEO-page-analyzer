@@ -91,16 +91,16 @@
                                     <?= htmlspecialchars($check->id) ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->status_code) ?>
+                                    <?= htmlspecialchars($check->status_code ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->h1) ?>
+                                    <?= htmlspecialchars($check->h1 ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->title) ?>
+                                    <?= htmlspecialchars($check->title ?? '') ?>
                                 </td>
                                 <td>
-                                    <?= htmlspecialchars($check->description) ?>
+                                    <?= htmlspecialchars($check->description ?? '') ?>
                                 </td>
                                 <td>
                                     <?= htmlspecialchars($check->created_at) ?>
