@@ -14,8 +14,8 @@ class UrlCheck
 
     public function __construct(object $checkRecord)
     {
-        $this->urlId = $checkRecord->id;
-        $this->name = $checkRecord->name;
+        $this->urlId = $checkRecord->id ?? null;
+        $this->name = $checkRecord->name ?? null;
     }
 
     public function getUrlId()
