@@ -7,8 +7,6 @@ use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\PrepareUrl;
 
-use function DI\string;
-
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
@@ -98,7 +96,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     }
     return $response->withRedirect($router->
-    urlFor('url', ['id' => string($id)]), 303);
+    urlFor('url', ['id' => strval($id)]), 303);
 });
 
 $app->run();

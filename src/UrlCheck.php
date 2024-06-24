@@ -12,10 +12,10 @@ class UrlCheck
     private ?string $title;
     private ?string $description;
 
-    public function __construct(object $checkRecord)
+    public function __construct(\stdClass $checkRecord)
     {
-        $this->urlId = $checkRecord->id ?? null;
-        $this->name = $checkRecord->name ?? null;
+        $this->urlId = $checkRecord->id;
+        $this->name = $checkRecord->name;
     }
 
     public function getUrlId()
