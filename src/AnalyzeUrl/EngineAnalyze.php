@@ -6,6 +6,7 @@ use Hexlet\Code\UrlCheck;
 use Hexlet\Code\Url;
 use Illuminate\Support\Str;
 use PhpParser\Node\Expr\Cast\Object_;
+use stdClass;
 
 class EngineAnalyze
 {
@@ -21,10 +22,10 @@ class EngineAnalyze
         $this->analyzers = $analyzersClasses;
     }
 
-    public function process(object $url)
+    public function process(stdClass $url)
     {
+        $urlCheck = new UrlCheck($url);
         try {
-            $urlCheck = new UrlCheck($url);
             foreach ($this->analyzers as $method) {
                 $method->process($urlCheck);
             }
