@@ -32,8 +32,7 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
-    $url = $dbHandler->process('find by id', $id);
-    if (!$url) {
+    if (!is_numeric($id) || !$url = $dbHandler->process('find by id', $id)) {
         return $response->withStatus(404);
     }
     $checkRecords = $dbHandler->process('get check records', $id);
@@ -82,20 +81,22 @@ $app->post('/urls', function ($request, $response) use ($router) {
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
     $analyzer = new EngineAnalyze('Check Connection', 'Check Params');
-    $urlId = $args['url_id'];
-    $url = $dbHandler->process('find by id', $urlId);
-    if (!$url) {
+    $id = $args['url_id'];
+    if (!is_numeric($id) || !$url = $dbHandler->process('find by id', $id)) {
         return $response->withStatus(404);
     }
     $checkResult = $analyzer->process($url);
-    if ($checkResult instanceof \Exception) {
-        $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
-    } else {
+    if ($checkResult->getStatusCode() == 200) {
         $dbHandler->process('insert check', $checkResult);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+    } elseif ($checkResult->getHtmlBody() != null) {
+        $dbHandler->process('insert check', $checkResult);
+        $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
+    } else {
+        $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     }
     return $response->withRedirect($router->
-    urlFor('url', ['id' => $urlId]), 303);
+    urlFor('url', ['id' => $id]), 303);
 });
 
 $app->run();

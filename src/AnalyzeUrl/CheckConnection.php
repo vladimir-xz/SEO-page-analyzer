@@ -12,7 +12,7 @@ class CheckConnection
     {
         try {
             $client = new Client();
-            $res = $client->request('GET', $url->getName(), ['connect_timeout' => 3.14]);
+            $res = $client->request('GET', $url->getName(), ['connect_timeout' => 3.14, 'http_errors' => false]);
             $status = $res->getStatusCode();
             $url->setHtmlBody($res->getBody()->__toString());
             $url->setStatusCode($status);

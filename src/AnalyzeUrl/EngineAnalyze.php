@@ -30,7 +30,7 @@ class EngineAnalyze
             }
             return $urlCheck;
         } catch (\Exception $e) {
-            return $e;
+            return $urlCheck;
         }
     }
 }

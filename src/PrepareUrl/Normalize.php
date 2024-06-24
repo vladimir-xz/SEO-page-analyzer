@@ -6,7 +6,8 @@ class Normalize
 {
     public static function process(string $url): string
     {
-        $urlParts = parse_url($url);
+        $urlLowKey = mb_strtolower($url);
+        $urlParts = parse_url($urlLowKey);
         return $urlParts['scheme'] . '://' . $urlParts['host'];
     }
 }
