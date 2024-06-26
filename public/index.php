@@ -5,7 +5,7 @@ use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
 use Hexlet\Code\Urls\Analyze\Engine;
 use Hexlet\Code\DbHandler;
-use Hexlet\Code\PrepareUrl;
+use Hexlet\Code\Urls\Prepare;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -57,7 +57,7 @@ $app->get('/urls', function ($request, $response) {
 
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
-    $error = PrepareUrl\Validate::validate($url['name']);
+    $error = Prepare\Validate::validate($url['name']);
     if ($error != null) {
         $params = [
             'url' => $url['name'],
@@ -66,7 +66,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
     $dbHandler = new DbHandler('urls');
-    $normalizedUrl = PrepareUrl\Normalize::process($url['name']);
+    $normalizedUrl = Prepare\Normalize::process($url['name']);
     $existingUrl = $dbHandler->process('find by url', $normalizedUrl);
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
