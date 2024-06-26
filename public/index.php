@@ -13,7 +13,9 @@ session_start();
 
 $container = new Container();
 $container->set('renderer', function () {
-    return new \Slim\Views\PhpRenderer(__DIR__ . '/../view');
+    $phpView = new \Slim\Views\PhpRenderer(__DIR__ . '/../view');
+    $phpView->setLayout('layout.phtml');
+    return $phpView;
 });
 $container->set('flash', function () {
     return new \Slim\Flash\Messages();
@@ -55,11 +57,11 @@ $app->get('/urls', function ($request, $response) {
 
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
-    $errors = PrepareUrl\Validate::validate($url['name']);
-    if (count($errors) > 0) {
+    $error = PrepareUrl\Validate::validate($url['name']);
+    if ($error != null) {
         $params = [
             'url' => $url['name'],
-            'errors' => $errors
+            'error' => $error
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
