@@ -27,7 +27,7 @@ $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response) {
-    return $this->get('renderer')->render($response, 'index.phtml');
+    return $this->get('renderer')->render($response, 'index.phtml', ['main' => 'active']);
 })->setName('index');
 
 $app->get('/urls/{id}', function ($request, $response, $args) {
@@ -50,6 +50,7 @@ $app->get('/urls', function ($request, $response) {
     $dbHandler = new DbHandler('urls');
     $urls = $dbHandler->process('get urls');
     $params = [
+        'pages' => 'active',
         'urls' => $urls,
     ];
     return $this->get('renderer')->render($response, '/urls/index.phtml', $params);
@@ -60,6 +61,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
     $error = Prepare\Validate::validate($url['name']);
     if ($error != null) {
         $params = [
+            'main' => 'active',
             'url' => $url['name'],
             'error' => $error
         ];
