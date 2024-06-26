@@ -30,7 +30,8 @@ class Validate
             if ($v->validate()) {
                 return null;
             }
-            $firstError = $v->errors()['url'][0];
+            $errors = $v->errors();
+            $firstError = $errors['url'][0] ?? '';
             return self::$errorMessages[$firstError];
         } catch (\Exception $e) {
             return [$e->getMessage()];
