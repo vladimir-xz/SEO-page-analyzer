@@ -1,9 +1,9 @@
 <?php
 
-namespace Hexlet\Code\UrlsDatabase;
+namespace Hexlet\Code\Urls\Database;
 
 use Carbon\Carbon;
-use Hexlet\Code\UrlCheck;
+use Hexlet\Code\Urls\UrlCheck;
 
 class InsertCheck
 {

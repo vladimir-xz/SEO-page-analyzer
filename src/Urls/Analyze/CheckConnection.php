@@ -1,10 +1,10 @@
 <?php
 
-namespace Hexlet\Code\AnalyzeUrl;
+namespace Hexlet\Code\Urls\Analyze;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
-use Hexlet\Code\UrlCheck;
+use Hexlet\Code\Urls\UrlCheck;
 
 class CheckConnection
 {

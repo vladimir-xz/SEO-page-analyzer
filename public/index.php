@@ -3,7 +3,7 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\AnalyzeUrl\EngineAnalyze;
+use Hexlet\Code\Urls\Analyze\Engine;
 use Hexlet\Code\DbHandler;
 use Hexlet\Code\PrepareUrl;
 
@@ -82,7 +82,7 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
-    $analyzer = new EngineAnalyze('Check Connection', 'Check Params');
+    $analyzer = new Engine('Check Connection', 'Check Params');
     $id = $args['url_id'];
     if (!is_numeric($id) || !$url = $dbHandler->process('find by id', $id)) {
         return $response->withStatus(404);

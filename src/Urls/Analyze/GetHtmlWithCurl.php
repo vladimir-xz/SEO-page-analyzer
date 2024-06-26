@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\AnalyzeUrl;
+namespace Hexlet\Code\Urls\Analyze;
 
 class GetHtmlWithCurl
 {

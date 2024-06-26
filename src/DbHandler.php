@@ -12,7 +12,7 @@ class DbHandler
     public function __construct(
         string $databaseName
     ) {
-        $this->dbName = ucfirst($databaseName) . 'Database';
+        $this->dbName = ucfirst($databaseName) . '\\Database';
         $DbClass = 'Hexlet\\Code\\' . $this->dbName . '\\Connect';
         $database = $DbClass::get()->connect();
         $this->db = $database;

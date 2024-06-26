@@ -1,11 +1,10 @@
 <?php
 
-namespace Hexlet\Code\AnalyzeUrl;
+namespace Hexlet\Code\Urls\Analyze;
 
 use DiDom\Document;
 use Illuminate\Support\Arr;
-use Hexlet\Code\UrlCheck;
-use Hexlet\Code\AnalyzeUrl\CurlHelper;
+use Hexlet\Code\Urls\UrlCheck;
 
 class CheckParams
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\PrepareUrl;
+namespace Hexlet\Code\Url\Prepare;
 
 class Normalize
 {

@@ -1,14 +1,11 @@
 <?php
 
-namespace Hexlet\Code\AnalyzeUrl;
+namespace Hexlet\Code\Urls\Analyze;
 
-use Hexlet\Code\UrlCheck;
-use Hexlet\Code\Url;
+use Hexlet\Code\Urls\UrlCheck;
 use Illuminate\Support\Str;
-use PhpParser\Node\Expr\Cast\Object_;
-use stdClass;
 
-class EngineAnalyze
+class Engine
 {
     private array $analyzers;
 
@@ -16,13 +13,13 @@ class EngineAnalyze
     {
         $analyzersClasses = array_map(function ($name) {
             $properName = Str::of($name)->camel()->ucfirst();
-            $actionClass = 'Hexlet\\Code\\AnalyzeUrl\\' . $properName;
+            $actionClass = 'Hexlet\\Code\\Urls\\Analyze\\' . $properName;
             return new $actionClass();
         }, $analyzers);
         $this->analyzers = $analyzersClasses;
     }
 
-    public function process(stdClass $url)
+    public function process(\stdClass $url)
     {
         $urlCheck = new UrlCheck($url);
         try {

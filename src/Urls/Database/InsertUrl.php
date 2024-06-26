@@ -1,6 +1,6 @@
 <?php
 
-namespace Hexlet\Code\UrlsDatabase;
+namespace Hexlet\Code\Urls\Database;
 
 use Carbon\Carbon;
 
