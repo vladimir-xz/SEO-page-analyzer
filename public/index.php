@@ -28,7 +28,7 @@ $router = $app->getRouteCollector()->getRouteParser();
 
 $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml');
-})->setName('main');
+})->setName('index');
 
 $app->get('/urls/{id}', function ($request, $response, $args) {
     $messages = $this->get('flash')->getMessages();
@@ -43,8 +43,8 @@ $app->get('/urls/{id}', function ($request, $response, $args) {
         'checks' => $checkRecords,
         'flash' => $messages
     ];
-    return $this->get('renderer')->render($response, 'url.phtml', $params);
-})->setName('url');
+    return $this->get('renderer')->render($response, '/urls/show.phtml', $params);
+})->setName('urls.show');
 
 $app->get('/urls', function ($request, $response) {
     $dbHandler = new DbHandler('urls');
@@ -52,8 +52,8 @@ $app->get('/urls', function ($request, $response) {
     $params = [
         'urls' => $urls,
     ];
-    return $this->get('renderer')->render($response, 'urls.phtml', $params);
-})->setName('urls');
+    return $this->get('renderer')->render($response, '/urls/index.phtml', $params);
+})->setName('urls.index');
 
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
@@ -71,14 +71,14 @@ $app->post('/urls', function ($request, $response) use ($router) {
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
-        urlFor('url', ['id' => $existingUrl]), 302);
+        urlFor('urls.show', ['id' => $existingUrl]), 302);
     } else {
         $insertedId = $dbHandler->process('insert url', $normalizedUrl);
         $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         return $response->withRedirect($router->
-            urlFor('url', ['id' => $insertedId]), 303);
+            urlFor('urls.show', ['id' => $insertedId]), 303);
     }
-});
+})->setName('urls.store');
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
@@ -98,7 +98,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     }
     return $response->withRedirect($router->
-    urlFor('url', ['id' => strval($id)]), 303);
-});
+    urlFor('urls.show', ['id' => strval($id)]), 303);
+})->setName('urls.checks');
 
 $app->run();

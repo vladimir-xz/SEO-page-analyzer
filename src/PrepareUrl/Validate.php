@@ -22,7 +22,7 @@ class Validate
         'Url is not a valid URL' => 'Некорректный URL',
     ];
 
-    public static function validate(string $url): string
+    public static function validate(string $url): string|null
     {
         try {
             $v = new Validator(['url' => $url]);
