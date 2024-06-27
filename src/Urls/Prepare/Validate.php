@@ -31,7 +31,7 @@ class Validate
             if ($v->validate()) {
                 return null;
             }
-            return $v->errors();
+            $errors = $v->errors();
             $firstError = $errors['url'][0] ?? '';
             return self::$errorMessages[$firstError];
         } catch (\Exception $e) {
