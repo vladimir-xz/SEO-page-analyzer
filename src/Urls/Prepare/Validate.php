@@ -20,9 +20,10 @@ class Validate
     private static array $errorMessages = [
         'Url is required' => 'URL не должен быть пустым',
         'Url is not a valid URL' => 'Некорректный URL',
+        'Url must not exceed 255 characters' => 'URL не должен превышать 255 символов'
     ];
 
-    public static function validate(string $url): string|null
+    public static function validate(string $url): ?string
     {
         try {
             $v = new Validator(['url' => $url]);
@@ -30,7 +31,7 @@ class Validate
             if ($v->validate()) {
                 return null;
             }
-            $errors = $v->errors();
+            return $v->errors();
             $firstError = $errors['url'][0] ?? '';
             return self::$errorMessages[$firstError];
         } catch (\Exception $e) {
