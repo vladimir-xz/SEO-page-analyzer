@@ -16,7 +16,7 @@
                         <tr>
                             <td><?= htmlspecialchars($url->id)?></td>
                             <td>
-                                <a href="/urls/<?= htmlspecialchars($url->id)?>">
+                                <a href="<?= $urlsShow(htmlspecialchars($url->id))?>">
                                     <?= htmlspecialchars($url->name)?>
                                 </a>
                             </td>

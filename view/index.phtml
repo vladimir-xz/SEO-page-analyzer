@@ -3,31 +3,25 @@
         <div class="col-12 col-md-10 col-lg-8 border bg-light mx-auto rounded-3 p-5">
             <h1 class="display-3">Анализатор страниц</h1>
             <p class="fs-5 fw-light">Бесплатно проверяйте сайты на SEO пригодность</p>
-            <form action="/urls" class="row mb-3" method="post">
+            <form action="<?= $urlsStore?>" class="row mb-3" method="post">
                 <div class="col-8">
-                    <?php if (isset($error)) : ?>
-                        <input
-                            type="text" 
-                            name='url[name]' 
-                            id="validationServer03" 
-                            class="form-control is-invalid form-control-lg" 
-                            value="<?= htmlspecialchars($url ?? '') ?>" 
-                            placeholder="https://www.example.com" 
-                            aria-describedby="validationServer03Feedback"
-                        >
-                        <div id="validationServer03Feedback" class="invalid-feedback">
-                            <?= $error?>
-                        </div>
-                    <?php else : ?>
-                        <input 
-                            type="text"
-                            name='url[name]'
-                            id="validationServer03"
-                            class="form-control form-control-lg"
-                            placeholder="https://www.example.com"
-                            aria-describedby="validationServer03Feedback"
-                        >
-                    <?php endif ?>
+                    <input
+                        type="text" 
+                        name='url[name]' 
+                        id="validationServer03" 
+                        class="
+                            form-control
+                            <?php if (isset($error)) :?>
+                                <?= 'is-invalid'?>
+                            <?php endif ?>
+                            form-control-lg" 
+                        value="<?= htmlspecialchars($url ?? '') ?>" 
+                        placeholder="https://www.example.com" 
+                        aria-describedby="validationServer03Feedback"
+                    >
+                    <div id="validationServer03Feedback" class="invalid-feedback">
+                        <?= $error?>
+                    </div>
                 </div>
                 <div class="col-2">
                     <input

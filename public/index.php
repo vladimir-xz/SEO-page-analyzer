@@ -12,11 +12,7 @@ require __DIR__ . '/../vendor/autoload.php';
 session_start();
 
 $container = new Container();
-$container->set('renderer', function () {
-    $phpView = new \Slim\Views\PhpRenderer(__DIR__ . '/../view');
-    $phpView->setLayout('layout.phtml');
-    return $phpView;
-});
+
 $container->set('flash', function () {
     return new \Slim\Flash\Messages();
 });
@@ -26,22 +22,37 @@ $app->addErrorMiddleware(true, true, true);
 $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
+$container->set('renderer', function () use ($router, $container) {
+    $messages = $container->get('flash')->getMessages();
+    $phpView = new \Slim\Views\PhpRenderer(
+        __DIR__ . '/../view',
+        [
+            'flash' => $messages,
+            'index' => $router->urlFor('index'),
+            'urlsShow' => fn($id) => $router->urlFor('urls.show', ['id' => $id]),
+            'urlsIndex' => $router->urlFor('urls.index'),
+            'urlsStore' => $router->urlFor('urls.store'),
+            'urlsCheck' => fn($id) => $router->urlFor('urls.checks', ['url_id' => $id])
+        ]
+    );
+    $phpView->setLayout('layout.phtml');
+    return $phpView;
+});
+
 $app->get('/', function ($request, $response) {
     return $this->get('renderer')->render($response, 'index.phtml', ['main' => 'active']);
 })->setName('index');
 
-$app->get('/urls/{id}', function ($request, $response, $args) {
-    $messages = $this->get('flash')->getMessages();
+$app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) {
     $id = $args['id'];
     $dbHandler = new DbHandler('urls');
-    if (!is_numeric($id) || !$url = $dbHandler->process('find by id', $id)) {
+    if (!$url = $dbHandler->process('find by id', $id)) {
         return $response->withStatus(404);
     }
     $checkRecords = $dbHandler->process('get check records', $id);
     $params = [
         'url' => $url,
         'checks' => $checkRecords,
-        'flash' => $messages
     ];
     return $this->get('renderer')->render($response, '/urls/show.phtml', $params);
 })->setName('urls.show');
@@ -82,11 +93,11 @@ $app->post('/urls', function ($request, $response) use ($router) {
     }
 })->setName('urls.store');
 
-$app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($router) {
+$app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args) use ($router) {
     $dbHandler = new DbHandler('urls');
     $analyzer = new Engine('Check Connection', 'Check Params');
     $id = $args['url_id'];
-    if (!is_numeric($id) || !$url = $dbHandler->process('find by id', $id)) {
+    if (!$url = $dbHandler->process('find by id', $id)) {
         return $response->withStatus(404);
     }
     $checkResult = $analyzer->process($url);
@@ -100,7 +111,7 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, $args) use ($
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     }
     return $response->withRedirect($router->
-    urlFor('urls.show', ['id' => strval($id)]), 303);
+    urlFor('urls.show', ['id' => $id]), 303);
 })->setName('urls.checks');
 
 $app->run();

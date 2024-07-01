@@ -20,7 +20,7 @@
         </div>
     </div>
     <h2 class="mt-5">Проверки</h2>
-    <form action="/urls/<?= htmlspecialchars($url->id)?>/checks" class="my-3" method="post">
+    <form action="<?= $urlsCheck(htmlspecialchars($url->id))?>" class="my-3" method="post">
         <input type="submit" class="btn btn-primary" value="Запустить проверку">
     </form>
     <table class="table table-bordered table-responsive" data-test="checks">
@@ -35,30 +35,28 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (isset($checks)) : ?>
-                <?php foreach ($checks as $check) : ?>
-                    <tr>
-                        <td>
-                            <?= htmlspecialchars($check->id) ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($check->status_code ?? '') ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($check->h1 ?? '') ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($check->title ?? '') ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($check->description ?? '') ?>
-                        </td>
-                        <td>
-                            <?= htmlspecialchars($check->created_at) ?>
-                        </td>
-                    </tr>
-                <?php endforeach ?>
-            <?php endif ?>
+            <?php foreach ($checks as $check) : ?>
+                <tr>
+                    <td>
+                        <?= htmlspecialchars($check->id) ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($check->status_code ?? '') ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($check->h1 ?? '') ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($check->title ?? '') ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($check->description ?? '') ?>
+                    </td>
+                    <td>
+                        <?= htmlspecialchars($check->created_at) ?>
+                    </td>
+                </tr>
+            <?php endforeach ?>
         </tbody>
     </table>
 </div>
