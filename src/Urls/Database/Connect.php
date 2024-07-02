@@ -4,9 +4,9 @@ namespace Hexlet\Code\Urls\Database;
 
 class Connect
 {
-    private static ?Connect $conn = null;
+    private ?\PDO $conn = null;
 
-    public function connect()
+    public function __construct()
     {
         try {
             $databaseUrl = parse_url($_ENV['DATABASE_URL']);
@@ -24,7 +24,7 @@ class Connect
             $pdo = new \PDO($conStr);
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $pdo->setAttribute(\PDO::ATTR_DEFAULT_FETCH_MODE, \PDO::FETCH_OBJ);
-            return $pdo;
+            $this->conn = $pdo;
         } catch (\PDOException $e) {
             echo 'Ошибка выполнения запроса: ' . $e->getMessage();
         } catch (\Exception $e) {
@@ -32,12 +32,8 @@ class Connect
         }
     }
 
-    public static function get()
+    public function get()
     {
-        if (null === self::$conn) {
-            self::$conn = new self();
-        }
-
-        return self::$conn;
+        return $this->conn;
     }
 }
