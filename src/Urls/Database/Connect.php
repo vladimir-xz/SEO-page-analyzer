@@ -4,7 +4,7 @@ namespace Hexlet\Code\Urls\Database;
 
 class Connect
 {
-    private ?\PDO $conn = null;
+    private \PDO $conn;
 
     public function __construct()
     {

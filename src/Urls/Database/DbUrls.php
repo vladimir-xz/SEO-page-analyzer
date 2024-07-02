@@ -7,7 +7,7 @@ use Hexlet\Code\Urls\UrlCheck;
 
 class DbUrls
 {
-    protected ?\PDO $db;
+    protected \PDO $db;
 
     public function __construct(Connect $db)
     {
