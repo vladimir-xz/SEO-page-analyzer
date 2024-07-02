@@ -26,7 +26,7 @@ $app->add(MethodOverrideMiddleware::class);
 $router = $app->getRouteCollector()->getRouteParser();
 
 $container->set('renderer', function () use ($router, $container) {
-    $messages = $container->get('flash')->create()->getMessages();
+    $messages = $container->get('flash')->getMessages();
     $phpView = new \Slim\Views\PhpRenderer(
         __DIR__ . '/../view',
         [
