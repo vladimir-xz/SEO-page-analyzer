@@ -50,11 +50,12 @@ class Analyze
         Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
             if (count($elements = $document->find($value)) == 0) {
                 return;
-            } elseif ($key === 'Description') {
-                $result = optional($elements[0]->content, fn() => $elements[0]->content);
             } else {
-                $result = optional($elements[0]->text(), fn() => $elements[0]->text());
+                $result = optional($elements[0]->address)->street;
             }
+            // } else {
+            //     $result = optional($elements[0]->text(), fn() => $elements[0]->text());
+            // }
             $command = 'set' . $key;
             $url->$command($result);
         });
