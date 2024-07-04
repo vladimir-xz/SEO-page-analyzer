@@ -51,11 +51,8 @@ class Analyze
             if (count($elements = $document->find($value)) == 0) {
                 return;
             } else {
-                $result = optional($elements[0]->address)->street;
+                $result = $elements[0]->content ?? $elements[0]->text();
             }
-            // } else {
-            //     $result = optional($elements[0]->text(), fn() => $elements[0]->text());
-            // }
             $command = 'set' . $key;
             $url->$command($result);
         });
