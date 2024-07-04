@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use DiDom\Document;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Optional;
 use Hexlet\Code\Urls\UrlCheck;
 
 class Analyze
