@@ -5,7 +5,6 @@ namespace Hexlet\Code\Urls;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use DiDom\Document;
-use Illuminate\Support\Arr;
 use Hexlet\Code\Urls\UrlCheck;
 
 class Analyze
@@ -42,9 +41,9 @@ class Analyze
     public static function checkParams(UrlCheck $url)
     {
         $document = new Document($url->getHtmlBody());
-        $h1 = optional($document->first('h1'))->text();
-        $title = optional($document->first('title'))->text();
-        $description = optional($document->find('meta[name=description]')[0])->content;
+        $h1 = $document->first('h1')?->text();
+        $title = $document->first('title')?->text();
+        $description = $document->first('meta[name=description]')?->content;
         $url->setH1($h1);
         $url->setTitle($title);
         $url->setDescription($description);
