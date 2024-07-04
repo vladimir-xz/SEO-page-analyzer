@@ -3,12 +3,9 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\Urls\Analyze\Engine;
+use Hexlet\Code\Urls\Analyze;
 use Hexlet\Code\DbHandler;
-use Hexlet\Code\Urls\Prepare;
-
-use function DI\create;
-use function DI\get;
+use Hexlet\Code\Urls\Validate;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -32,26 +29,39 @@ $container->set('renderer', function () use ($router, $container) {
         [
             'flash' => $messages,
             'index' => $router->urlFor('index'),
-            'urlsShow' => fn($id) => $router->urlFor('urls.show', ['id' => $id]),
-            'urlsIndex' => $router->urlFor('urls.index'),
-            'urlsStore' => $router->urlFor('urls.store'),
-            'urlsCheck' => fn($id) => $router->urlFor('urls.checks', ['url_id' => $id])
+            'urlsIndex' => $router->urlFor('urls.index')
         ]
     );
     $phpView->setLayout('layout.phtml');
     return $phpView;
 });
 
-$container->set('dbUrls', function () {
-    $dbConnect = new \Hexlet\Code\Urls\Database\Connect();
+$container->set('urlCheckFactory', function () {
+    return new \Hexlet\Code\Urls\UrlCheckFactory();
+});
+
+$container->set('urlAnalyzer', function () use ($container) {
+    $urlCheckFactory = $container->get('urlCheckFactory');
+    return new \Hexlet\Code\Urls\Analyze($urlCheckFactory);
+});
+
+$container->set('dbConnect', function () {
+    return new \Hexlet\Code\Urls\Database\Connect();
+});
+
+$container->set('dbUrls', function () use ($container) {
+
+    $dbConnect = $container->get('dbConnect');
     return new \Hexlet\Code\Urls\Database\DbUrls($dbConnect);
 });
 
-$app->get('/', function ($request, $response) {
-    return $this->get('renderer')->render($response, 'index.phtml', ['main' => 'active']);
+$app->get('/', function ($request, $response) use ($router) {
+    return $this->get('renderer')->render($response, 'index.phtml', [
+        'main' => 'active', 'urlsStore' => $router->urlFor('urls.store'),
+    ]);
 })->setName('index');
 
-$app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) {
+$app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) use ($router) {
     $id = $args['id'];
     $urlsDatabase = $this->get('dbUrls');
     if (!$url = $urlsDatabase->findById($id)) {
@@ -61,40 +71,41 @@ $app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) {
     $params = [
         'url' => $url,
         'checks' => $checkRecords,
+        'urlsCheck' => fn($id) => $router->urlFor('urls.checks', ['url_id' => $id])
     ];
     return $this->get('renderer')->render($response, '/urls/show.phtml', $params);
 })->setName('urls.show');
 
-$app->get('/urls', function ($request, $response) {
+$app->get('/urls', function ($request, $response) use ($router) {
     $urlsDatabase = $this->get('dbUrls');
     $urls = $urlsDatabase->getUrls();
     $params = [
         'pages' => 'active',
         'urls' => $urls,
+        'urlsShow' => fn($id) => $router->urlFor('urls.show', ['id' => $id])
     ];
     return $this->get('renderer')->render($response, '/urls/index.phtml', $params);
 })->setName('urls.index');
 
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
-    $error = Prepare\Validate::validate($url['name']);
-    if ($error != null) {
+    $valideUrl = Validate::validate($url['name']);
+    if (is_array($valideUrl)) {
         $params = [
             'main' => 'active',
             'url' => $url['name'],
-            'error' => $error
+            'error' => $valideUrl[0]
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
     $urlsDatabase = $this->get('dbUrls', 'Urls');
-    $normalizedUrl = Prepare\Normalize::process($url['name']);
-    $existingUrl = $urlsDatabase->findByUrl($normalizedUrl);
+    $existingUrl = $urlsDatabase->findByUrl($valideUrl);
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
         urlFor('urls.show', ['id' => $existingUrl]), 302);
     } else {
-        $insertedId = $urlsDatabase->insertUrl($normalizedUrl);
+        $insertedId = $urlsDatabase->insertUrl($valideUrl);
         $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         return $response->withRedirect($router->
             urlFor('urls.show', ['id' => $insertedId]), 303);
@@ -103,12 +114,12 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args) use ($router) {
     $urlsDatabase = $this->get('dbUrls');
-    $analyzer = new Engine('Check Connection', 'Check Params');
+    $analyzer = $this->get('urlAnalyzer');
     $id = $args['url_id'];
     if (!$url = $urlsDatabase->findById($id)) {
         return $response->withStatus(404);
     }
-    $checkResult = $analyzer->process($url);
+    $checkResult = $analyzer->checkUrl($url);
     if ($checkResult->getStatusCode() == 200) {
         $urlsDatabase->insertCheck($checkResult);
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
