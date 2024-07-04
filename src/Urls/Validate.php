@@ -26,8 +26,7 @@ class Validate
         $v->rule('url', 'lengthMax', 255)->message('Некорректный URL');
 
         if (!$v->validate()) {
-            $errors = $v->errors();
-            return $errors['url'];
+            return $v->errors()['url'] ?? [];
         }
 
         return $normalizedUrl;

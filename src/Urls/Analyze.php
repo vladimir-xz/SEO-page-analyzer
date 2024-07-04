@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\TransferException;
 use DiDom\Document;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Optional;
 use Hexlet\Code\Urls\UrlCheck;
 
 class Analyze
@@ -45,23 +44,19 @@ class Analyze
         }
     }
 
-    private function checkParams(UrlCheck $url)
+    public static function checkParams(UrlCheck $url)
     {
-        try {
-            $document = new Document($url->getHtmlBody());
-            Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
-                if (count($elements = $document->find($value)) == 0) {
-                    return;
-                } elseif ($key === 'Description') {
-                    $result = optional($elements[0])->content;
-                } else {
-                    $result = optional($elements[0])->text();
-                }
-                $command = 'set' . $key;
-                $url->$command($result);
-            });
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
+        $document = new Document($url->getHtmlBody());
+        Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
+            if (count($elements = $document->find($value)) == 0) {
+                return;
+            } elseif ($key === 'Description') {
+                $result = optional($elements[0])->content;
+            } else {
+                $result = optional($elements[0])->text();
+            }
+            $command = 'set' . $key;
+            $url->$command($result);
+        });
     }
 }
