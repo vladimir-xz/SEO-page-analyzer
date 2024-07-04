@@ -47,13 +47,11 @@ class Analyze
     public static function checkParams(UrlCheck $url)
     {
         $document = new Document($url->getHtmlBody());
-        Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
-            if (count($elements = $document->find($value)) == 0) {
-                return;
-            }
-            $result = optional($elements[0]->address)->street;
-            $command = 'set' . $key;
-            $url->$command($result);
-        });
+        $h1 = optional($document->first('h1'))->text();
+        $title = optional($document->first('title'))->text();
+        $description = optional($document->find('meta[name=description]')[0])->content;
+        $url->setH1($h1);
+        $url->setTitle($title);
+        $url->setDescription($description);
     }
 }
