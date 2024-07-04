@@ -58,5 +58,5 @@ class Analyze
             $command = 'set' . $key;
             $url->$command($result);
         });
-}
+    }
 }
