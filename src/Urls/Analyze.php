@@ -16,15 +16,15 @@ class Analyze
         $this->urlCheckFactory = $urlCheckFactory;
     }
 
-    public function checkUrl(\stdClass $url)
+    public function checkUrl(\stdClass $url): UrlCheck
     {
         $urlCheck = $this->urlCheckFactory->create($url);
-        $this->checkConnection($urlCheck);
-        $this->checkParams($urlCheck);
+        $this->getStatusAndBody($urlCheck);
+        $this->getParams($urlCheck);
         return $urlCheck;
     }
 
-    private function checkConnection(UrlCheck $url)
+    private function getStatusAndBody(UrlCheck $url): void
     {
         try {
             $client = new Client();
@@ -38,7 +38,7 @@ class Analyze
         }
     }
 
-    private function checkParams(UrlCheck $url)
+    private function getParams(UrlCheck $url): void
     {
         $document = new Document($url->getHtmlBody());
         $h1 = $document->first('h1')?->text();

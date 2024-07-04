@@ -30,18 +30,5 @@ class Validate
         }
 
         return $normalizedUrl;
-
-        // try {
-        //     $v = new Validator(['url' => $url]);
-        //     $v->rules(self::$rules);
-        //     if ($v->validate()) {
-        //         return null;
-        //     }
-        //     $errors = $v->errors();
-        //     $firstError = $errors['url'][0] ?? '';
-        //     return self::$errorMessages[$firstError];
-        // } catch (\Exception $e) {
-        //     return [$e->getMessage()];
-        // }
     }
 }

@@ -18,17 +18,17 @@ class UrlCheck
         $this->name = $checkRecord->name;
     }
 
-    public function getUrlId()
+    public function getUrlId(): int
     {
         return $this->urlId;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getStatusCode()
+    public function getStatusCode(): ?int
     {
         if (isset($this->statusCode)) {
             return $this->statusCode;
@@ -36,7 +36,7 @@ class UrlCheck
         return null;
     }
 
-    public function getHtmlBody()
+    public function getHtmlBody(): ?string
     {
         if (isset($this->htmlBody)) {
             return $this->htmlBody;
@@ -44,7 +44,7 @@ class UrlCheck
         return null;
     }
 
-    public function getH1()
+    public function getH1(): ?string
     {
         if (isset($this->h1)) {
             return $this->h1;
@@ -52,7 +52,7 @@ class UrlCheck
         return null;
     }
 
-    public function getTitle()
+    public function getTitle(): ?string
     {
         if (isset($this->title)) {
             return $this->title;
@@ -60,7 +60,7 @@ class UrlCheck
         return null;
     }
 
-    public function getDescription()
+    public function getDescription(): ?string
     {
         if (isset($this->description)) {
             return $this->description;
@@ -68,27 +68,27 @@ class UrlCheck
         return null;
     }
 
-    public function setHtmlBody(string $string)
+    public function setHtmlBody(string $string): void
     {
         $this->htmlBody = $string;
     }
 
-    public function setStatusCode(int $code)
+    public function setStatusCode(int $code): void
     {
         $this->statusCode = $code;
     }
 
-    public function setH1(?string $h1)
+    public function setH1(?string $h1): void
     {
         $this->h1 = $h1;
     }
 
-    public function setTitle(?string $title)
+    public function setTitle(?string $title): void
     {
         $this->title = $title;
     }
 
-    public function setDescription(?string $description)
+    public function setDescription(?string $description): void
     {
         $this->description = $description;
     }
