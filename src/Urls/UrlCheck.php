@@ -78,17 +78,17 @@ class UrlCheck
         $this->statusCode = $code;
     }
 
-    public function setH1(string $h1)
+    public function setH1(?string $h1)
     {
         $this->h1 = $h1;
     }
 
-    public function setTitle(string $title)
+    public function setTitle(?string $title)
     {
         $this->title = $title;
     }
 
-    public function setDescription(string $description)
+    public function setDescription(?string $description)
     {
         $this->description = $description;
     }

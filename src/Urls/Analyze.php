@@ -50,9 +50,8 @@ class Analyze
         Arr::map(self::$analyzeParams, function ($value, $key) use ($document, $url) {
             if (count($elements = $document->find($value)) == 0) {
                 return;
-            } else {
-                $result = $elements[0]->content ?? $elements[0]->text();
             }
+            $result = optional($elements[0]->address)->street;
             $command = 'set' . $key;
             $url->$command($result);
         });
