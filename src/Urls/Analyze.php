@@ -11,11 +11,6 @@ use Hexlet\Code\Urls\UrlCheck;
 class Analyze
 {
     private \Hexlet\Code\Urls\UrlCheckFactory $urlCheckFactory;
-    private static array $analyzeParams = [
-        'H1' => 'h1',
-        'Title' => 'title',
-        'Description' => 'meta[name=description]'
-    ];
 
     public function __construct(\Hexlet\Code\Urls\UrlCheckFactory $urlCheckFactory)
     {
