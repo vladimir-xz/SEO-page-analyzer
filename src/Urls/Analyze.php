@@ -38,7 +38,7 @@ class Analyze
         }
     }
 
-    public static function checkParams(UrlCheck $url)
+    private function checkParams(UrlCheck $url)
     {
         $document = new Document($url->getHtmlBody());
         $h1 = $document->first('h1')?->text();
