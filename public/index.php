@@ -3,8 +3,6 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
-use Hexlet\Code\Urls\Analyze;
-use Hexlet\Code\DbHandler;
 use Hexlet\Code\Urls\Validate;
 
 require __DIR__ . '/../vendor/autoload.php';
