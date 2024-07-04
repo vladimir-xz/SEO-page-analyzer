@@ -51,12 +51,12 @@ class Analyze
             if (count($elements = $document->find($value)) == 0) {
                 return;
             } elseif ($key === 'Description') {
-                $result = optional($elements[0])->content;
+                $result = optional($elements[0]->content, fn() => $elements[0]->content);
             } else {
-                $result = optional($elements[0])->text();
+                $result = optional($elements[0]->text(), fn() => $elements[0]->text());
             }
             $command = 'set' . $key;
             $url->$command($result);
         });
-    }
+}
 }
