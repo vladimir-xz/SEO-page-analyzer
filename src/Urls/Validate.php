@@ -13,7 +13,9 @@ class Validate
         }
         $urlLowKey = mb_strtolower($url);
         $urlParts = parse_url($urlLowKey);
-        return $urlParts['scheme'] . '://' . $urlParts['host'];
+        $scheme = $urlParts['scheme'] ?? '';
+        $host = $urlParts['host'] ?? '';
+        return $scheme . '://' . $host;
     }
 
     public static function validate(string $url): string|array
