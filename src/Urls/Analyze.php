@@ -41,8 +41,8 @@ class Analyze
     private function getParams(UrlCheck $url): void
     {
         $document = new Document($url->getHtmlBody());
-        $h1 = $document->first('h1')?->text();
-        $title = $document->first('title')?->text();
+        $h1 = $document->first('h1')?->getNode()->textContent;
+        $title = $document->first('title')?->getNode()->textContent;
         $description = $document->first('meta[name=description]')?->getAttribute('content');
         $url->setH1($h1);
         $url->setTitle($title);
