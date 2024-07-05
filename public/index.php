@@ -48,7 +48,6 @@ $container->set('dbConnect', function () {
 });
 
 $container->set('dbUrls', function () use ($container) {
-
     $dbConnect = $container->get('dbConnect');
     return new \Hexlet\Code\Urls\Database\DbUrls($dbConnect);
 });
