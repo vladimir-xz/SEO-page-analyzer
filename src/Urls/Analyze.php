@@ -43,7 +43,7 @@ class Analyze
         $document = new Document($url->getHtmlBody());
         $h1 = $document->first('h1')?->text();
         $title = $document->first('title')?->text();
-        $description = $document->first('meta[name=description]')?->content;
+        $description = $document->first('meta[name=description]')?->getAttribute('content');
         $url->setH1($h1);
         $url->setTitle($title);
         $url->setDescription($description);
