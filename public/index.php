@@ -91,7 +91,8 @@ $app->post('/urls', function ($request, $response) use ($router) {
         $params = [
             'main' => 'active',
             'url' => $url['name'],
-            'error' => $valideUrl[0]
+            'error' => $valideUrl[0],
+            'urlsStore' => $router->urlFor('urls.store')
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
