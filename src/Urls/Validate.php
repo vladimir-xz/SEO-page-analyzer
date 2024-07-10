@@ -8,29 +8,26 @@ class Validate
 {
     private static function normalize(string $url): string
     {
-        if (!$url) {
-            return $url;
-        }
-        $urlLowKey = mb_strtolower($url);
-        $urlParts = parse_url($urlLowKey);
+        $urlLower = mb_strtolower($url);
+        $urlParts = parse_url($urlLower);
         $scheme = $urlParts['scheme'] ?? '';
         $host = $urlParts['host'] ?? '';
         return $scheme . '://' . $host;
     }
 
-    public static function validate(string $url): string|array
+    public static function validate(string $url): array
     {
-        $normalizedUrl = self::normalize($url);
-
-        $v = new Validator(['url' => $normalizedUrl]);
+        $v = new Validator(['url' => $url]);
         $v->rule('required', 'url')->message('URL не должен быть пустым');
         $v->rule('url', 'url')->message('Некорректный URL');
         $v->rule('url', 'lengthMax', 255)->message('Некорректный URL');
 
         if (!$v->validate()) {
-            return $v->errors()['url'] ?? [];
+            return ['error' => $v->errors()['url'] ?? []];
         }
 
-        return $normalizedUrl;
+        $normalizedUrl = self::normalize($url);
+
+        return ['url' => $normalizedUrl];
     }
 }

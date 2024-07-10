@@ -3,6 +3,8 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
+use GuzzleHttp\Client;
+use DiDom\Document;
 use Hexlet\Code\Urls\Validate;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -34,15 +36,6 @@ $container->set('renderer', function () use ($router, $container) {
     return $phpView;
 });
 
-$container->set('urlCheckFactory', function () {
-    return new \Hexlet\Code\Urls\UrlCheckFactory();
-});
-
-$container->set('urlAnalyzer', function () use ($container) {
-    $urlCheckFactory = $container->get('urlCheckFactory');
-    return new \Hexlet\Code\Urls\Analyze($urlCheckFactory);
-});
-
 $container->set('dbConnect', function () {
     return new \Hexlet\Code\Urls\Database\Connect();
 });
@@ -64,7 +57,7 @@ $app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) use ($route
     if (!$url = $urlsDatabase->findById($id)) {
         return $response->withStatus(404);
     }
-    $checkRecords = $urlsDatabase->getCheckRecords($id);
+    $checkRecords = $urlsDatabase->getUrlChecks($id);
     $params = [
         'url' => $url,
         'checks' => $checkRecords,
@@ -87,23 +80,23 @@ $app->get('/urls', function ($request, $response) use ($router) {
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
     $valideUrl = Validate::validate($url['name']);
-    if (is_array($valideUrl)) {
+    if (isset($valideUrl['error'])) {
         $params = [
             'main' => 'active',
             'url' => $url['name'],
-            'error' => $valideUrl[0],
+            'error' => $valideUrl['error'],
             'urlsStore' => $router->urlFor('urls.store')
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
-    $urlsDatabase = $this->get('dbUrls', 'Urls');
-    $existingUrl = $urlsDatabase->findByUrl($valideUrl);
+    $urlsDatabase = $this->get('dbUrls');
+    $existingUrl = $urlsDatabase->findByUrl($valideUrl['url']);
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
         urlFor('urls.show', ['id' => $existingUrl]), 302);
     } else {
-        $insertedId = $urlsDatabase->insertUrl($valideUrl);
+        $insertedId = $urlsDatabase->insertUrl($valideUrl['url']);
         $this->get('flash')->addMessage('success', 'Страница успешно добавлена');
         return $response->withRedirect($router->
             urlFor('urls.show', ['id' => $insertedId]), 303);
@@ -112,23 +105,39 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args) use ($router) {
     $urlsDatabase = $this->get('dbUrls');
-    $analyzer = $this->get('urlAnalyzer');
     $id = $args['url_id'];
     if (!$url = $urlsDatabase->findById($id)) {
         return $response->withStatus(404);
     }
-    $checkResult = $analyzer->checkUrl($url);
-    if ($checkResult->getStatusCode() == 200) {
-        $urlsDatabase->insertCheck($checkResult);
-        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
-    } elseif ($checkResult->getHtmlBody() != null) {
-        $urlsDatabase->insertCheck($checkResult);
-        $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
-    } else {
+    try {
+        $client = new Client();
+        $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14, 'http_errors' => false]);
+        $status = $res->getStatusCode();
+        $body = $res->getBody()->__toString();
+        $document = new Document($body);
+        $h1 = $document->first('h1')?->text();
+        $title = $document->first('title')?->text();
+        $description = $document->first('meta[name=description]')?->getAttribute('content');
+        $params = [
+            'url_id' => $id,
+            'status_code' => $status,
+            'h1' => $h1,
+            'title' => $title,
+            'description' => $description
+        ];
+        $urlsDatabase->insertCheck($params);
+        $checkStatus = 303;
+        if ($status == 200) {
+            $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+        } else {
+            $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
+        }
+    } catch (\Exception $e) {
+        $checkStatus = 302;
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
     }
     return $response->withRedirect($router->
-    urlFor('urls.show', ['id' => $id]), 303);
+    urlFor('urls.show', ['id' => $id]), $checkStatus);
 })->setName('urls.checks');
 
 $app->run();
