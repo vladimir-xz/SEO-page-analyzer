@@ -23,7 +23,7 @@ class Validate
         $v->rule('url', 'lengthMax', 255)->message('Некорректный URL');
 
         if (!$v->validate()) {
-            return ['error' => $v->errors()['url'] ?? []];
+            return ['errors' => $v->errors()['url'] ?? []];
         }
 
         $normalizedUrl = self::normalize($url);

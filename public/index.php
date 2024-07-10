@@ -80,11 +80,11 @@ $app->get('/urls', function ($request, $response) use ($router) {
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
     $valideUrl = Validate::validate($url['name']);
-    if (isset($valideUrl['error'])) {
+    if (isset($valideUrl['errors'])) {
         $params = [
             'main' => 'active',
             'url' => $url['name'],
-            'error' => $valideUrl['error'],
+            'error' => $valideUrl['errors'][0],
             'urlsStore' => $router->urlFor('urls.store')
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
@@ -115,9 +115,9 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
         $status = $res->getStatusCode();
         $body = $res->getBody()->__toString();
         $document = new Document($body);
-        $h1 = $document->first('h1')?->text();
-        $title = $document->first('title')?->text();
-        $description = $document->first('meta[name=description]')?->getAttribute('content');
+        $h1 = optional($document->first('h1'))->text();
+        $title = optional($document->first('title'))->text();
+        $description = optional($document->first('meta[name=description]'))->getAttribute('content');
         $params = [
             'url_id' => $id,
             'status_code' => $status,
