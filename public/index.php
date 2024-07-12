@@ -3,7 +3,9 @@
 use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
+use Slim\Flash\Messages;
 use GuzzleHttp\Client;
+use Slim\Views\PhpRenderer;
 use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use DiDom\Document;
@@ -17,7 +19,7 @@ session_start();
 
 $container = new Container();
 
-$container->set('flash', new \Slim\Flash\Messages());
+$container->set('flash', new Messages());
 
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);
@@ -26,7 +28,7 @@ $router = $app->getRouteCollector()->getRouteParser();
 
 $container->set('renderer', function ($container) use ($router) {
     $messages = $container->get('flash')->getMessages();
-    $phpView = new \Slim\Views\PhpRenderer(
+    $phpView = new PhpRenderer(
         __DIR__ . '/../view',
         [
             'flash' => $messages,
