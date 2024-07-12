@@ -4,17 +4,8 @@ namespace Hexlet\Code\Urls;
 
 use Valitron\Validator;
 
-class Validate
+class UrlValidator
 {
-    private static function normalize(string $url): string
-    {
-        $urlLower = mb_strtolower($url);
-        $urlParts = parse_url($urlLower);
-        $scheme = $urlParts['scheme'] ?? '';
-        $host = $urlParts['host'] ?? '';
-        return $scheme . '://' . $host;
-    }
-
     public static function validate(string $url): array
     {
         $v = new Validator(['url' => $url]);
@@ -26,8 +17,6 @@ class Validate
             return ['errors' => $v->errors()['url'] ?? []];
         }
 
-        $normalizedUrl = self::normalize($url);
-
-        return ['url' => $normalizedUrl];
+        return ['url' => $url];
     }
 }

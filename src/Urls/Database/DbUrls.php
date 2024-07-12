@@ -53,26 +53,20 @@ class DbUrls
                     name
                 FROM urls
                 ORDER BY id DESC';
-        $secondReq = 'SELECT checks.url_id, 
+        $secondReq = 'SELECT DISTINCT ON (url_id)
+                        checks.url_id, 
                         checks.created_at as last_check, 
                         checks.status_code
                     FROM url_checks as checks
-                    WHERE checks.created_at = (
-                            SELECT MAX(created_at)
-                            FROM url_checks
-                            WHERE url_id = checks.url_id
-                        )';
-        $sth = $this->db->prepare($firstReq);
-        $sth->execute();
+                    ORDER BY url_id, id DESC';
+        $sth = $this->db->query($firstReq);
         $allUrls = $sth->fetchAll();
         $sth = $this->db->prepare($secondReq);
         $sth->execute();
-        $lastUrlChecks = $sth->fetchAll();
+        $lastUrlChecks = collect($sth->fetchAll())->keyBy('url_id');
         return Arr::map($allUrls, function ($url) use ($lastUrlChecks) {
-            $needed = Arr::first($lastUrlChecks, function ($value) use ($url) {
-                return $value->url_id === $url->id;
-            });
-            return (object) array_merge((array) $url, (array) $needed);
+            $urlId = $url->id;
+            return (object) array_merge((array) $url, (array) $lastUrlChecks[$urlId]);
         });
     }
 

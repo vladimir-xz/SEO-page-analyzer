@@ -4,8 +4,12 @@ use Slim\Factory\AppFactory;
 use Slim\Middleware\MethodOverrideMiddleware;
 use DI\Container;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\RequestException;
 use DiDom\Document;
-use Hexlet\Code\Urls\Validate;
+use Hexlet\Code\Urls\Database\DbUrls;
+use Hexlet\Code\Urls\UrlValidator;
+use Hexlet\Code\Urls\Helpers\Utils;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -13,9 +17,7 @@ session_start();
 
 $container = new Container();
 
-$container->set('flash', function () {
-    return new \Slim\Flash\Messages();
-});
+$container->set('flash', new \Slim\Flash\Messages());
 
 $app = AppFactory::createFromContainer($container);
 $app->addErrorMiddleware(true, true, true);
@@ -36,15 +38,6 @@ $container->set('renderer', function () use ($router, $container) {
     return $phpView;
 });
 
-$container->set('dbConnect', function () {
-    return new \Hexlet\Code\Urls\Database\Connect();
-});
-
-$container->set('dbUrls', function () use ($container) {
-    $dbConnect = $container->get('dbConnect');
-    return new \Hexlet\Code\Urls\Database\DbUrls($dbConnect);
-});
-
 $app->get('/', function ($request, $response) use ($router) {
     return $this->get('renderer')->render($response, 'index.phtml', [
         'main' => 'active', 'urlsStore' => $router->urlFor('urls.store'),
@@ -53,7 +46,7 @@ $app->get('/', function ($request, $response) use ($router) {
 
 $app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) use ($router) {
     $id = $args['id'];
-    $urlsDatabase = $this->get('dbUrls');
+    $urlsDatabase = $this->get(DbUrls::class);
     if (!$url = $urlsDatabase->findById($id)) {
         return $response->withStatus(404);
     }
@@ -67,7 +60,7 @@ $app->get('/urls/{id:[0-9]+}', function ($request, $response, $args) use ($route
 })->setName('urls.show');
 
 $app->get('/urls', function ($request, $response) use ($router) {
-    $urlsDatabase = $this->get('dbUrls');
+    $urlsDatabase = $this->get(DbUrls::class);
     $urls = $urlsDatabase->getUrls();
     $params = [
         'pages' => 'active',
@@ -79,7 +72,7 @@ $app->get('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls', function ($request, $response) use ($router) {
     $url = $request->getParsedBodyParam('url');
-    $valideUrl = Validate::validate($url['name']);
+    $valideUrl = UrlValidator::validate($url['name']);
     if (isset($valideUrl['errors'])) {
         $params = [
             'main' => 'active',
@@ -89,8 +82,9 @@ $app->post('/urls', function ($request, $response) use ($router) {
         ];
         return $this->get('renderer')->render($response, "index.phtml", $params)->withStatus(422);
     }
-    $urlsDatabase = $this->get('dbUrls');
-    $existingUrl = $urlsDatabase->findByUrl($valideUrl['url']);
+    $normalUrl = Utils::normalize($valideUrl['url']);
+    $urlsDatabase = $this->get(DbUrls::class);
+    $existingUrl = $urlsDatabase->findByUrl($normalUrl);
     if ($existingUrl) {
         $this->get('flash')->addMessage('success', 'Страница уже существует');
         return $response->withRedirect($router->
@@ -104,40 +98,41 @@ $app->post('/urls', function ($request, $response) use ($router) {
 })->setName('urls.store');
 
 $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args) use ($router) {
-    $urlsDatabase = $this->get('dbUrls');
+    $urlsDatabase = $this->get(DbUrls::class);
     $id = $args['url_id'];
     if (!$url = $urlsDatabase->findById($id)) {
         return $response->withStatus(404);
     }
+
     try {
         $client = new Client();
-        $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14, 'http_errors' => false]);
-        $status = $res->getStatusCode();
-        $body = $res->getBody()->__toString();
-        $document = new Document($body);
-        $h1 = optional($document->first('h1'))->text();
-        $title = optional($document->first('title'))->text();
-        $description = optional($document->first('meta[name=description]'))->getAttribute('content');
-        $params = [
-            'url_id' => $id,
-            'status_code' => $status,
-            'h1' => $h1,
-            'title' => $title,
-            'description' => $description
-        ];
-        $urlsDatabase->insertCheck($params);
-        $checkStatus = 303;
-        if ($status == 200) {
-            $this->get('flash')->addMessage('success', 'Страница успешно проверена');
-        } else {
-            $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
-        }
-    } catch (\Exception $e) {
-        $checkStatus = 302;
+        $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14]);
+        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+    } catch (ConnectException  $e) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
+        return $response->withRedirect($router->
+            urlFor('urls.show', ['id' => $id]));
+    } catch (RequestException $e) {
+        $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14, 'http_errors' => false]);
+        $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
     }
+
+    $status = $res->getStatusCode();
+    $body = (string) $res->getBody();
+    $document = new Document($body);
+    $h1 = optional($document->first('h1'))->text();
+    $title = optional($document->first('title'))->text();
+    $description = optional($document->first('meta[name=description]'))->getAttribute('content');
+    $params = [
+        'url_id' => $id,
+        'status_code' => $status,
+        'h1' => $h1,
+        'title' => $title,
+        'description' => $description
+    ];
+    $urlsDatabase->insertCheck($params);
     return $response->withRedirect($router->
-    urlFor('urls.show', ['id' => $id]), $checkStatus);
+    urlFor('urls.show', ['id' => $id]), 303);
 })->setName('urls.checks');
 
 $app->run();
