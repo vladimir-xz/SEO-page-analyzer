@@ -120,8 +120,8 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
             urlFor('urls.show', ['id' => $id]));
     } catch (RequestException $e) {
         $clientResponse = $e->getResponse();
-        $status = $clientResponse->getStatusCode();
-        $body = (string) $clientResponse->getBody();
+        $status = $clientResponse->getStatusCode() ?? null;
+        $body = (string) $clientResponse->getBody() ?? null;
         $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
     }
 
