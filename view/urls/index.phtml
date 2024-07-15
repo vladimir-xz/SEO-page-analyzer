@@ -20,8 +20,8 @@
                                     <?= htmlspecialchars($url->name)?>
                                 </a>
                             </td>
-                            <td><?= htmlspecialchars($urls['lastUrlCheck'][$url->id]->last_check ?? '')?></th>
-                            <td><?= htmlspecialchars($urls['lastUrlCheck'][$url->id]->status_code  ?? '')?></th>
+                            <td><?= htmlspecialchars($urls['lastUrlChecks'][$url->id]->last_check ?? '')?></th>
+                            <td><?= htmlspecialchars($urls['lastUrlChecks'][$url->id]->status_code  ?? '')?></th>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

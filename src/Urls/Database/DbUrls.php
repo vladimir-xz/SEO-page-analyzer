@@ -65,7 +65,7 @@ class DbUrls
         $sth = $this->db->prepare($secondReq);
         $sth->execute();
         $lastUrlChecks = collect($sth->fetchAll())->keyBy('url_id')->all();
-        return ['allUrls' => $allUrls, 'lastUrlCheck' => $lastUrlChecks];
+        return ['allUrls' => $allUrls, 'lastUrlChecks' => $lastUrlChecks];
     }
 
     public function insertCheck(array $params)

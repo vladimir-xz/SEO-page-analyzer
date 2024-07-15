@@ -111,6 +111,8 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
     try {
         $client = new Client();
         $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14]);
+        $status = $res->getStatusCode();
+        $body = (string) $res->getBody();
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     } catch (ConnectException  $e) {
         $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
@@ -118,12 +120,12 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
             urlFor('urls.show', ['id' => $id]));
     } catch (RequestException $e) {
         $clientResponse = $e->getResponse();
+        $status = $clientResponse->getStatusCode();
+        $body = (string) $clientResponse->getBody();
         $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
     }
 
-    $status = optional($res)->getStatusCode() ?? $clientResponse->getStatusCode();
-    $body = optional($res)->getBody() ?? $clientResponse->getBody();
-    $document = new Document((string) $body);
+    $document = new Document($body);
     $h1 = optional($document->first('h1'))->text();
     $title = optional($document->first('title'))->text();
     $description = optional($document->first('meta[name=description]'))->getAttribute('content');
