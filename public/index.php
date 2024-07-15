@@ -13,6 +13,8 @@ use Hexlet\Code\Urls\Database\DbUrls;
 use Hexlet\Code\Urls\UrlValidator;
 use Hexlet\Code\Urls\Helpers\Utils;
 
+use function DI\string;
+
 require __DIR__ . '/../vendor/autoload.php';
 
 session_start();
@@ -115,13 +117,13 @@ $app->post('/urls/{url_id:[0-9]+}/checks', function ($request, $response, $args)
         return $response->withRedirect($router->
             urlFor('urls.show', ['id' => $id]));
     } catch (RequestException $e) {
-        $res = $client->request('GET', $url->name, ['connect_timeout' => 3.14, 'http_errors' => false]);
+        $clientResponse = $e->getResponse();
         $this->get('flash')->addMessage('warning ', 'Проверка была выполнена успешно, но сервер ответил с ошибкой');
     }
 
-    $status = $res->getStatusCode();
-    $body = (string) $res->getBody();
-    $document = new Document($body);
+    $status = optional($res)->getStatusCode() ?? $clientResponse->getStatusCode();
+    $body = optional($res)->getBody() ?? $clientResponse->getBody();
+    $document = new Document((string) $body);
     $h1 = optional($document->first('h1'))->text();
     $title = optional($document->first('title'))->text();
     $description = optional($document->first('meta[name=description]'))->getAttribute('content');

@@ -12,7 +12,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($urls as $url) : ?>
+                    <?php foreach ($urls['allUrls'] as $url) : ?>
                         <tr>
                             <td><?= htmlspecialchars($url->id)?></td>
                             <td>
@@ -20,8 +20,8 @@
                                     <?= htmlspecialchars($url->name)?>
                                 </a>
                             </td>
-                            <td><?= htmlspecialchars($url->last_check ?? '')?></th>
-                            <td><?= htmlspecialchars($url->status_code ?? '')?></th>
+                            <td><?= htmlspecialchars($urls['lastUrlCheck'][$url->id]->last_check ?? '')?></th>
+                            <td><?= htmlspecialchars($urls['lastUrlCheck'][$url->id]->status_code  ?? '')?></th>
                         </tr>
                     <?php endforeach ?>
                 </tbody>

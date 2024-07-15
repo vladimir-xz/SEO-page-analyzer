@@ -53,6 +53,7 @@ class DbUrls
                     name
                 FROM urls
                 ORDER BY id DESC';
+
         $secondReq = 'SELECT DISTINCT ON (url_id)
                         checks.url_id, 
                         checks.created_at as last_check, 
@@ -63,11 +64,8 @@ class DbUrls
         $allUrls = $sth->fetchAll();
         $sth = $this->db->prepare($secondReq);
         $sth->execute();
-        $lastUrlChecks = collect($sth->fetchAll())->keyBy('url_id');
-        return Arr::map($allUrls, function ($url) use ($lastUrlChecks) {
-            $urlId = $url->id;
-            return (object) array_merge((array) $url, (array) $lastUrlChecks[$urlId]);
-        });
+        $lastUrlChecks = collect($sth->fetchAll())->keyBy('url_id')->all();
+        return ['allUrls' => $allUrls, 'lastUrlCheck' => $lastUrlChecks];
     }
 
     public function insertCheck(array $params)
